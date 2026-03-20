@@ -1,0 +1,73 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get btnSignUp => 'Sign Up';
+
+  @override
+  String get btnSignIn => 'Sign in';
+
+  @override
+  String get txtUsername => 'Username';
+
+  @override
+  String get txtEmail => 'Email';
+
+  @override
+  String get txtPhoneNumber => 'Phone number';
+
+  @override
+  String get txtPassword => 'Password';
+
+  @override
+  String get txtRepeatPassword => 'Repeat password';
+
+  @override
+  String get txtMediaReporter => 'Media Reporter';
+
+  @override
+  String get txtVisitor => 'Visitor';
+
+  @override
+  String get txtHaveAnAccount => 'Have an account?';
+
+  @override
+  String get txtIamA => 'I am a';
+
+  @override
+  String get txtForgotPassword => 'Forgot password?';
+
+  @override
+  String get txtDontHaveAnAccount => 'Dont have an account?';
+
+  @override
+  String get txtRegister => 'Register';
+
+  @override
+  String get txtEnterYourEmail => 'Enter your email';
+
+  @override
+  String get txtVerificationCode => 'Verification Code';
+
+  @override
+  String get txtEnterNewPassword => 'Enter new password';
+
+  @override
+  String get txtReEnterYourPassword => 'Re Enter your Password';
+
+  @override
+  String get txtPleaseFillAllFields => 'Please fill all fields';
+
+  @override
+  String get txtPasswordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get txtOrSignInWith => 'or sign in with';
+}
