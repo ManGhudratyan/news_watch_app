@@ -77,7 +77,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               );
               return;
             }
-            Navigator.pushReplacementNamed(context, RouteConstants.homePage);
+            Navigator.pushNamed(context, RouteConstants.homePage);
           },
           showSocialIcons: false,
         ),

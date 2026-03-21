@@ -20,5 +20,16 @@
     "txtReEnterYourPassword": "Re Enter your Password",
     "txtPleaseFillAllFields": "Please fill all fields",
     "txtPasswordsDoNotMatch": "Passwords do not match",
-    "txtOrSignInWith": "or sign in with"
+    "txtOrSignInWith": "or sign in with",
+    "txtAppBarSettings": "Settings",
+    "txtProfile": "Profile",
+    "txtMyWallet": "My Wallet",
+    "txtMyPost": "My Post",
+    "txtBoostYourPost": "Boost Your Post",
+    "txtNotifications": "Notifications",
+    "txtTermsAndConditions": "Terms and Conditions",
+    "txtAbout": "About",
+    "txtWatchAdsAndEarn": "Watch Ads & Earn",
+    "txtReferAndEarn": "Refer and Earn",
+    "txtLogOut": "Log out"
 }

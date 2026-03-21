@@ -24,7 +24,9 @@ class _SignInPageState extends State<SignInPage> {
         padding: EdgeInsets.symmetric(horizontal: Gaps.large),
         child: AuthLayout(
           buttonText: AppLocalizations.of(context)!.btnSignIn,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, RouteConstants.homePage);
+          },
           form: Column(
             children: [
               FormWidget(
@@ -44,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
+                  Navigator.pushNamed(
                     context,
                     RouteConstants.forgotPasswordPage,
                   );
@@ -62,7 +64,7 @@ class _SignInPageState extends State<SignInPage> {
               Text(AppLocalizations.of(context)!.txtDontHaveAnAccount),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
+                  Navigator.pushNamed(
                     context,
                     RouteConstants.signUpPage,
                   );

@@ -225,6 +225,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'or sign in with'**
   String get txtOrSignInWith;
+
+  /// No description provided for @txtAppBarSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get txtAppBarSettings;
+
+  /// No description provided for @txtProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get txtProfile;
+
+  /// No description provided for @txtMyWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'My Wallet'**
+  String get txtMyWallet;
+
+  /// No description provided for @txtMyPost.
+  ///
+  /// In en, this message translates to:
+  /// **'My Post'**
+  String get txtMyPost;
+
+  /// No description provided for @txtBoostYourPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost Your Post'**
+  String get txtBoostYourPost;
+
+  /// No description provided for @txtNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get txtNotifications;
+
+  /// No description provided for @txtTermsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get txtTermsAndConditions;
+
+  /// No description provided for @txtAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get txtAbout;
+
+  /// No description provided for @txtWatchAdsAndEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch Ads & Earn'**
+  String get txtWatchAdsAndEarn;
+
+  /// No description provided for @txtReferAndEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Refer and Earn'**
+  String get txtReferAndEarn;
+
+  /// No description provided for @txtLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get txtLogOut;
 }
 
 class _AppLocalizationsDelegate

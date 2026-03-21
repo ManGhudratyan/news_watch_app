@@ -13,7 +13,7 @@ class IconsContainer extends StatelessWidget {
       height: Constants.socialIconContainerSize,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(Constants.borderRadiusCircular),
       ),
       child: Center(
         child: SvgPicture.asset(

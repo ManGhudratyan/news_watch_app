@@ -70,4 +70,37 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get txtOrSignInWith => 'or sign in with';
+
+  @override
+  String get txtAppBarSettings => 'Settings';
+
+  @override
+  String get txtProfile => 'Profile';
+
+  @override
+  String get txtMyWallet => 'My Wallet';
+
+  @override
+  String get txtMyPost => 'My Post';
+
+  @override
+  String get txtBoostYourPost => 'Boost Your Post';
+
+  @override
+  String get txtNotifications => 'Notifications';
+
+  @override
+  String get txtTermsAndConditions => 'Terms and Conditions';
+
+  @override
+  String get txtAbout => 'About';
+
+  @override
+  String get txtWatchAdsAndEarn => 'Watch Ads & Earn';
+
+  @override
+  String get txtReferAndEarn => 'Refer and Earn';
+
+  @override
+  String get txtLogOut => 'Log out';
 }

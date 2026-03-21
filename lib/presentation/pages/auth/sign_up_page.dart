@@ -9,6 +9,7 @@ import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/widgets/form_widget.dart';
 import 'package:news_watch_app/presentation/widgets/auth_layout.dart';
 import 'package:news_watch_app/core/enums/radio_type.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -23,6 +24,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   RadioType selectedValue = RadioType.mediaReporter;
+
   @override
   Widget build(BuildContext context) {
     // final screenWidth = MediaQuery.of(context).size.width;
@@ -44,6 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
               FormWidget(
                 controller: emailController,
                 labelText: AppLocalizations.of(context)!.txtEmail,
+                // !use reactive_forms: ^18.2.2
               ),
               SizedBox(height: screenHeight * 0.03),
               FormWidget(
@@ -109,10 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Text(AppLocalizations.of(context)!.txtHaveAnAccount),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    RouteConstants.signInPage,
-                  );
+                  Navigator.pushNamed(context, RouteConstants.signInPage);
                 },
                 child: Text(
                   AppLocalizations.of(context)!.btnSignIn,

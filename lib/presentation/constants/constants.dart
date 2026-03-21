@@ -5,5 +5,5 @@ abstract class Constants {
   static double get dividierThickness => 1;
   static double get socialIconSize => 24;
   static double get socialIconContainerSize => 60;
-
+  static double get borderRadiusCircular => 12;
 }
