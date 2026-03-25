@@ -103,4 +103,49 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get txtLogOut => 'Log out';
+
+  @override
+  String get txtFIrstName => 'First name';
+
+  @override
+  String get txtLastName => 'Last name';
+
+  @override
+  String get txtMyProfile => 'My profile';
+
+  @override
+  String get txtChangeProfilePhoto => 'Change profile photo';
+
+  @override
+  String get txtUploadMediaDocument => 'Upload Media Document';
+
+  @override
+  String get txtBrowseFile => 'Browse file';
+
+  @override
+  String get txtAddPostImages => 'Add post images';
+
+  @override
+  String get txtAddHeading => 'Add Heading';
+
+  @override
+  String get txtAddTag => 'Add Tag';
+
+  @override
+  String get txtCategory => 'Category';
+
+  @override
+  String get txtVideoLink => 'Add Video Link';
+
+  @override
+  String get txtSponsored => 'Sponsored';
+
+  @override
+  String get txtDescription => 'Description';
+
+  @override
+  String get txtUpdateButton => 'Update';
+
+  @override
+  String get txtLoggedOutSuccessfully => 'Logged out successfully';
 }

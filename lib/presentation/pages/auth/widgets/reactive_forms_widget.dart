@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class FormWidget extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final bool obscureText;
-  final TextInputType? keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-
-  const FormWidget({
+class ReactiveFormsWidget extends StatefulWidget {
+  const ReactiveFormsWidget({
     super.key,
-    required this.controller,
-    required this.labelText,
+    required this.title,
+    required this.formControl,
     this.obscureText = false,
     this.keyboardType,
     this.inputFormatters,
   });
 
+  final String title;
+  final FormControl<String> formControl;
+  final bool obscureText;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
   @override
-  State<FormWidget> createState() => _FormWidgetState();
+  State<ReactiveFormsWidget> createState() => _ReactiveFormsWidgetState();
 }
 
-class _FormWidgetState extends State<FormWidget> {
+class _ReactiveFormsWidgetState extends State<ReactiveFormsWidget> {
   late bool _obscureText;
 
   @override
@@ -32,13 +33,13 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
+    return ReactiveTextField<String>(
+      formControl: widget.formControl,
       obscureText: _obscureText,
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
       decoration: InputDecoration(
-        labelText: widget.labelText,
+        labelText: widget.title,
         suffixIcon: widget.obscureText
             ? IconButton(
                 icon: Icon(
@@ -52,6 +53,12 @@ class _FormWidgetState extends State<FormWidget> {
               )
             : null,
       ),
+      validationMessages: {
+        ValidationMessage.required: (_) => '${widget.title} is required',
+        ValidationMessage.email: (_) => 'Enter a valid email',
+        ValidationMessage.minLength: (_) =>
+            'Password needs to be at least 8 characters',
+      },
     );
   }
 }

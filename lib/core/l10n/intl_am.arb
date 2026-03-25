@@ -31,5 +31,20 @@
     "txtAbout": "About",
     "txtWatchAdsAndEarn": "Watch Ads & Earn",
     "txtReferAndEarn": "Refer and Earn",
-    "txtLogOut": "Log out"
+    "txtLogOut": "Log out",
+    "txtFIrstName": "First name",
+    "txtLastName": "Last name",
+    "txtMyProfile": "My profile",
+    "txtChangeProfilePhoto": "Change profile photo",
+    "txtUploadMediaDocument": "Upload Media Document",
+    "txtBrowseFile": "Browse file",
+    "txtAddPostImages": "Add post images",
+    "txtAddHeading": "Add Heading",
+    "txtAddTag": "Add Tag",
+    "txtCategory": "Category",
+    "txtVideoLink": "Add Video Link",
+    "txtSponsored": "Sponsored",
+    "txtDescription": "Description",
+    "txtUpdateButton": "Update",
+    "txtLoggedOutSuccessfully": "Logged out successfully"
 }

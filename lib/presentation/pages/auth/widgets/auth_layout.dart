@@ -3,9 +3,9 @@ import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/widgets/button_widget.dart';
+import 'package:news_watch_app/presentation/pages/auth/widgets/button_widget.dart';
 import 'package:news_watch_app/presentation/widgets/divider_with_text.dart';
-import 'package:news_watch_app/presentation/widgets/icons_container.dart';
+import 'package:news_watch_app/presentation/pages/auth/widgets/icons_container.dart';
 
 class AuthLayout extends StatelessWidget {
   final Widget form;

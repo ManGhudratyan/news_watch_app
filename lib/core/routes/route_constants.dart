@@ -6,4 +6,9 @@ class RouteConstants {
   static const String forgotPasswordPage = '/forgot_password_page';
   static const String searchCityPage = '/search_city_page';
   static const String settingsPage = '/settings_page';
+  static const String profilePage = '/profile_page';
+  static const String addPostPage = '/add_post_page';
+  static const String mainPage = '/main_page';
+  static const String pollPage = '/poll_page';
+  static const String postDetailsPage = '/post_details_page';
 }

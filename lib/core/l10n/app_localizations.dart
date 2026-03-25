@@ -291,6 +291,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log out'**
   String get txtLogOut;
+
+  /// No description provided for @txtFIrstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First name'**
+  String get txtFIrstName;
+
+  /// No description provided for @txtLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name'**
+  String get txtLastName;
+
+  /// No description provided for @txtMyProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'My profile'**
+  String get txtMyProfile;
+
+  /// No description provided for @txtChangeProfilePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change profile photo'**
+  String get txtChangeProfilePhoto;
+
+  /// No description provided for @txtUploadMediaDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Media Document'**
+  String get txtUploadMediaDocument;
+
+  /// No description provided for @txtBrowseFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse file'**
+  String get txtBrowseFile;
+
+  /// No description provided for @txtAddPostImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Add post images'**
+  String get txtAddPostImages;
+
+  /// No description provided for @txtAddHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Heading'**
+  String get txtAddHeading;
+
+  /// No description provided for @txtAddTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Tag'**
+  String get txtAddTag;
+
+  /// No description provided for @txtCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get txtCategory;
+
+  /// No description provided for @txtVideoLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Video Link'**
+  String get txtVideoLink;
+
+  /// No description provided for @txtSponsored.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsored'**
+  String get txtSponsored;
+
+  /// No description provided for @txtDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get txtDescription;
+
+  /// No description provided for @txtUpdateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get txtUpdateButton;
+
+  /// No description provided for @txtLoggedOutSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out successfully'**
+  String get txtLoggedOutSuccessfully;
 }
 
 class _AppLocalizationsDelegate
