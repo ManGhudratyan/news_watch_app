@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onPressed: () {
                             if (form.valid && userState is UserLoaded) {
                               final updatedUser = UserModel(
-                                userId: userState.user.userId, // important!
+                                userId: userState.user.userId, 
                                 username: form.control('username').value,
                                 firstName: form.control('firstName').value,
                                 lastName: form.control('lastName').value,

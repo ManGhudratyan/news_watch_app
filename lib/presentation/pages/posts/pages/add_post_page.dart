@@ -39,7 +39,7 @@ class _AddPostPageState extends State<AddPostPage> {
   void _submitPost(BuildContext context, String userId) {
     if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all required fields')),
+        const SnackBar(content: Text('Please fill heading and description fields')),
       );
       return;
     }

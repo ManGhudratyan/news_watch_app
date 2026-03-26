@@ -37,7 +37,7 @@ class Routes {
       case RouteConstants.pollPage:
         return MaterialPageRoute(builder: (_) => const PollPage());
       case RouteConstants.postDetailsPage:
-      final post = settings.arguments as AddPostModel;
+        final post = settings.arguments as AddPostModel;
         return MaterialPageRoute(builder: (_) => PostDetailsPage(post: post));
       default:
         return MaterialPageRoute(

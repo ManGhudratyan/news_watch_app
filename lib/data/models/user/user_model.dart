@@ -11,6 +11,7 @@ class UserModel {
   final String? lastName;
   final String? userId;
   final String? firstName;
+  final String? userCity;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -24,6 +25,7 @@ class UserModel {
     this.lastName,
     this.userId,
     this.firstName,
+    this.userCity,
   });
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);

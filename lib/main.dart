@@ -5,6 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/routes/routes.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/repositories/add_post_repository_imp.dart';
 import 'package:news_watch_app/data/repositories/user_repository_imp.dart';
 import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
@@ -29,6 +30,10 @@ void main() async {
         BlocProvider<AddPostBloc>(
           create: (_) => AddPostBloc(addPostRepository: addPostRepository),
         ),
+         BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(),
+        ),
+      
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

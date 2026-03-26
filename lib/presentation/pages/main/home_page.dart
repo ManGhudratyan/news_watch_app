@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
@@ -21,8 +22,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthCubit>().authUser();
       final userState = context.read<UserBloc>().state;
       if (userState is UserLoaded) {
+        DateTime.now().toIso8601String(); //!change
         context.read<AddPostBloc>().add(
           GetPostsEvent(userId: userState.user.userId ?? ''),
         );

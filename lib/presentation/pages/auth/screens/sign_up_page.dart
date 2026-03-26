@@ -42,8 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     final txt = AppLocalizations.of(context)!;
     return BlocConsumer<UserBloc, UserState>(
-      listener: (context, userState) {
-      },
+      listener: (context, userState) {},
       builder: (context, userState) {
         return Scaffold(
           body: Padding(
@@ -57,7 +56,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     email: form.control('email').value,
                     phoneNumber: form.control('phone').value,
                     password: form.control('password').value,
-                    // userType: selectedValue,
                   );
                   context.read<UserBloc>().add(AddUserEvent(user));
                   Navigator.pushNamed(context, RouteConstants.mainPage);
