@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/widgets/list_tile_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
         icon: const Icon(Icons.logout),
         title: txt.txtLogOut,
         onTap: () {
-          context.read<UserBloc>().add(UserLogoutEvent());
+          context.read<AuthCubit>().userlogOut();
         },
       ),
     ];
@@ -59,9 +59,9 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(txt.txtAppBarSettings),
         automaticallyImplyLeading: false,
       ),
-      body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is UserLoggedOut) {
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, authState) {
+          if (authState is UserLoggedOut) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(txt.txtLoggedOutSuccessfully)),
             );
@@ -71,13 +71,13 @@ class _SettingsPageState extends State<SettingsPage> {
             ).pushNamed(RouteConstants.signInPage);
           }
 
-          if (state is UserError) {
+          if (authState is UserError) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ).showSnackBar(SnackBar(content: Text(authState.message)));
           }
         },
-        builder: (context, state) {
+        builder: (context, authState) {
           return ListView(children: items);
         },
       ),

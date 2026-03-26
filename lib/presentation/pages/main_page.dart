@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/repositories/add_post_repository_imp.dart';
 import 'package:news_watch_app/data/repositories/user_repository_imp.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
-import 'package:news_watch_app/presentation/pages/posts/logic/add_post_bloc.dart';
 import 'package:news_watch_app/presentation/pages/posts/pages/add_post_page.dart';
 import 'package:news_watch_app/presentation/pages/main/home_page.dart';
 import 'package:news_watch_app/presentation/pages/main/poll_page.dart';
@@ -33,19 +33,23 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<UserBloc>(
-          create: (_) => UserBloc(UserRepositoryImp())..add(GetUserEvent()),
+        // BlocProvider<AuthCubit>(
+        //   create: (_) => AuthCubit(UserRepositoryImp())..add(GetUserEvent()),
+        // ),
+        // BlocProvider<AddPostCubit>(
+        //   create: (_) => AddPostCubit(addPostRepository: AddPostRepositoryImp()),
+        // ),
+        BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(UserRepositoryImp())..getUser(),
         ),
-        BlocProvider<AddPostBloc>(
-          create: (_) => AddPostBloc(addPostRepository: AddPostRepositoryImp()),
+        BlocProvider<AddPostCubit>(
+          create: (_) => AddPostCubit(AddPostRepositoryImp()),
         ),
       ],
-      child: BlocListener<UserBloc, UserState>(
-        listener: (context, userState) {
-          if (userState is UserLoaded) {
-            context.read<AddPostBloc>().add(
-              GetPostsEvent(userId: userState.user.userId!),
-            );
+      child: BlocListener<AuthCubit, AuthState>(
+        listener: (context, authState) {
+          if (authState is UserLoaded) {
+            context.read<AddPostCubit>().getPosts(authState.user.userId!);
           }
         },
         child: PersistentTabView(

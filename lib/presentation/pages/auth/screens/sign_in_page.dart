@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/auth_layout.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/reactive_forms_widget.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -31,15 +31,15 @@ class _SignInPageState extends State<SignInPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     final txt = AppLocalizations.of(context)!;
 
-    return BlocConsumer<UserBloc, UserState>(
-      listener: (context, userState) {
-        if (userState is UserError) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, authState) {
+        if (authState is UserError) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(userState.message)));
+          ).showSnackBar(SnackBar(content: Text(authState.message)));
         }
-        if (userState is UserLoaded) {
-          final savedUser = userState.user;
+        if (authState is UserLoaded) {
+          final savedUser = authState.user;
           final enteredEmail = form.control('email').value;
           final enteredPassword = form.control('password').value;
 
@@ -58,7 +58,7 @@ class _SignInPageState extends State<SignInPage> {
           }
         }
       },
-      builder: (context, userState) {
+      builder: (context, authState) {
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: Gaps.large),
@@ -66,7 +66,7 @@ class _SignInPageState extends State<SignInPage> {
               buttonText: txt.btnSignIn,
               onPressed: () {
                 if (form.valid) {
-                  context.read<UserBloc>().add(GetUserEvent());
+                  context.read<AuthCubit>().getUser();
                 } else {
                   form.markAllAsTouched();
                 }

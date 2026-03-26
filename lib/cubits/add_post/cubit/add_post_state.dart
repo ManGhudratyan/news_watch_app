@@ -1,9 +1,9 @@
-part of 'add_post_bloc.dart';
+part of 'add_post_cubit.dart';
 
 @immutable
-abstract class AddPostState {}
+sealed class AddPostState {}
 
-class AddPostInitial extends AddPostState {}
+final class AddPostInitial extends AddPostState {}
 
 class AddPostLoading extends AddPostState {}
 

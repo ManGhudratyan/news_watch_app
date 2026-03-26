@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final AddPostModel post;
@@ -29,17 +29,17 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           SizedBox(width: 16),
         ],
       ),
-      body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, userState) {},
-        builder: (context, userState) {
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, authState) {},
+        builder: (context, authState) {
           String username = 'Unknown User';
           String userImage = Assets.userImage;
 
-          if (userState is UserLoaded) {
-            username = userState.user.username;
-            if (userState.user.imagePath != null &&
-                userState.user.imagePath!.isNotEmpty) {
-              userImage = userState.user.imagePath!;
+          if (authState is UserLoaded) {
+            username = authState.user.username;
+            if (authState.user.imagePath != null &&
+                authState.user.imagePath!.isNotEmpty) {
+              userImage = authState.user.imagePath!;
             }
           }
           return SingleChildScrollView(

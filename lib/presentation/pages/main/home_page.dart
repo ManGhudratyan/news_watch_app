@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
-import 'package:news_watch_app/presentation/pages/posts/logic/add_post_bloc.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,13 +21,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthCubit>().authUser();
-      final userState = context.read<UserBloc>().state;
-      if (userState is UserLoaded) {
+      final authState = context.read<AuthCubit>().state;
+      if (authState is UserLoaded) {
         DateTime.now().toIso8601String(); //!change
-        context.read<AddPostBloc>().add(
-          GetPostsEvent(userId: userState.user.userId ?? ''),
-        );
+        context.read<AddPostCubit>().getPosts(authState.user.userId ?? '');
       }
     });
   }
@@ -70,24 +66,24 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: BlocBuilder<UserBloc, UserState>(
-        builder: (context, userState) {
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
           String currentUsername = 'Unknown User';
           String userImage = Assets.userImage;
-          if (userState is UserLoaded) {
-            currentUsername = userState.user.username;
-            if (userState.user.imagePath != null &&
-                userState.user.imagePath!.isNotEmpty) {
-              userImage = userState.user.imagePath!;
+          if (authState is UserLoaded) {
+            currentUsername = authState.user.username;
+            if (authState.user.imagePath != null &&
+                authState.user.imagePath!.isNotEmpty) {
+              userImage = authState.user.imagePath!;
             }
           }
 
-          return BlocBuilder<AddPostBloc, AddPostState>(
-            builder: (context, state) {
-              if (state is AddPostLoading) {
+          return BlocBuilder<AddPostCubit, AddPostState>(
+            builder: (context, addPostState) {
+              if (addPostState is AddPostLoading) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is AddPostLoaded) {
-                final posts = state.posts;
+              } else if (addPostState is AddPostLoaded) {
+                final posts = addPostState.posts;
                 if (posts.isEmpty) {
                   return const Center(child: Text("You haven't posted yet"));
                 }
@@ -112,8 +108,8 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 );
-              } else if (state is AddPostFailure) {
-                return Center(child: Text('Error: ${state.error}'));
+              } else if (addPostState is AddPostFailure) {
+                return Center(child: Text('Error: ${addPostState.error}'));
               }
               return const Center(child: Text("No posts yet"));
             },

@@ -5,11 +5,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/routes/routes.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/repositories/add_post_repository_imp.dart';
 import 'package:news_watch_app/data/repositories/user_repository_imp.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
-import 'package:news_watch_app/presentation/pages/posts/logic/add_post_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,16 +23,12 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<UserBloc>(
-          create: (_) => UserBloc(userRepository)..add(GetUserEvent()),
+        BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(userRepository)..getUser(),
         ),
-        BlocProvider<AddPostBloc>(
-          create: (_) => AddPostBloc(addPostRepository: addPostRepository),
+        BlocProvider<AddPostCubit>(
+          create: (_) => AddPostCubit(addPostRepository),
         ),
-         BlocProvider<AuthCubit>(
-          create: (_) => AuthCubit(),
-        ),
-      
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

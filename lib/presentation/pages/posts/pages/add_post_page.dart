@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
-import 'package:news_watch_app/presentation/pages/posts/logic/add_post_bloc.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 
@@ -39,7 +39,9 @@ class _AddPostPageState extends State<AddPostPage> {
   void _submitPost(BuildContext context, String userId) {
     if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill heading and description fields')),
+        const SnackBar(
+          content: Text('Please fill heading and description fields'),
+        ),
       );
       return;
     }
@@ -52,32 +54,40 @@ class _AddPostPageState extends State<AddPostPage> {
       userId: userId,
     );
 
-    final addPostBloc = context.read<AddPostBloc>();
-    addPostBloc.add(AddNewPostEvent(model));
-    addPostBloc.add(GetPostsEvent(userId: userId));
+    final addPostCubit = context.read<AddPostCubit>();
+    addPostCubit.addNewPost(model);
+    addPostCubit.getPosts(userId);
 
-    Navigator.of(context, rootNavigator: true).pushNamed(RouteConstants.mainPage);
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).pushNamed(RouteConstants.mainPage);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddPostBloc, AddPostState>(
+    return BlocListener<AddPostCubit, AddPostState>(
       listener: (context, state) {
         if (state is AddPostSuccess) {
-          Navigator.of(context, rootNavigator: true).pushNamed(RouteConstants.mainPage);
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(RouteConstants.mainPage);
         } else if (state is AddPostFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error)));
         }
       },
-      child: BlocBuilder<UserBloc, UserState>(
-        builder: (context, userState) {
-          if (userState is! UserLoaded) {
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          if (authState is! UserLoaded) {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
 
-          final currentUserId = userState.user.userId;
+          final currentUserId = authState.user.userId;
 
           return Scaffold(
             appBar: AppBar(title: const Text("Add Post")),
@@ -92,7 +102,9 @@ class _AddPostPageState extends State<AddPostPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 207, 206, 206),
-                          borderRadius: BorderRadius.circular(Constants.borderRadiusCircular),
+                          borderRadius: BorderRadius.circular(
+                            Constants.borderRadiusCircular,
+                          ),
                           border: Border.all(color: const Color(0xFFA2A1A1)),
                         ),
                         width: Constants.addPostContainerSize,
@@ -101,13 +113,19 @@ class _AddPostPageState extends State<AddPostPage> {
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
-                                  Icon(Icons.add_outlined, size: 40, color: Colors.grey),
+                                  Icon(
+                                    Icons.add_outlined,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  ),
                                   SizedBox(height: 8),
                                   Text('Add Post Image'),
                                 ],
                               )
                             : ClipRRect(
-                                borderRadius: BorderRadius.circular(Constants.borderRadiusCircular),
+                                borderRadius: BorderRadius.circular(
+                                  Constants.borderRadiusCircular,
+                                ),
                                 child: Image.file(
                                   File(selectedImage!.path),
                                   fit: BoxFit.cover,
@@ -118,30 +136,52 @@ class _AddPostPageState extends State<AddPostPage> {
                       ),
                     ),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Heading', controller: headingController),
+                    PostElementsWidget(
+                      title: 'Heading',
+                      controller: headingController,
+                    ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(title: 'Tag', controller: tagController),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Category', controller: categoryController),
+                    PostElementsWidget(
+                      title: 'Category',
+                      controller: categoryController,
+                    ),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Video Link', controller: videoController),
+                    PostElementsWidget(
+                      title: 'Video Link',
+                      controller: videoController,
+                    ),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Description', controller: descriptionController),
+                    PostElementsWidget(
+                      title: 'Description',
+                      controller: descriptionController,
+                    ),
                     SizedBox(height: Gaps.larger),
-                    BlocBuilder<AddPostBloc, AddPostState>(
-                      builder: (context, state) {
-                        final isLoading = state is AddPostLoading;
+                    BlocBuilder<AddPostCubit, AddPostState>(
+                      builder: (context, addPostState) {
+                        final isLoading = addPostState is AddPostLoading;
                         return Center(
                           child: ElevatedButton(
-                            onPressed: isLoading ? null : () => _submitPost(context, currentUserId!),
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlueAccent),
+                            onPressed: isLoading
+                                ? null
+                                : () => _submitPost(context, currentUserId!),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.lightBlueAccent,
+                            ),
                             child: isLoading
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
                                   )
-                                : const Text('Post', style: TextStyle(color: Colors.white)),
+                                : const Text(
+                                    'Post',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                           ),
                         );
                       },

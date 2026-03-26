@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
 import 'package:news_watch_app/presentation/widgets/profile_form_widget.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<UserBloc>().add(GetUserEvent());
+    context.read<AuthCubit>().getUser();
   }
 
   @override
@@ -55,19 +55,19 @@ class _ProfilePageState extends State<ProfilePage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final txt = AppLocalizations.of(context)!;
 
-    return BlocConsumer<UserBloc, UserState>(
-      listener: (context, userState) async {
-        if (userState is UserLoaded) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, authState) async {
+        if (authState is UserLoaded) {
           form.patchValue({
-            'username': userState.user.username,
-            'firstName': userState.user.firstName,
-            'lastName': userState.user.lastName,
-            'email': userState.user.email,
+            'username': authState.user.username,
+            'firstName': authState.user.firstName,
+            'lastName': authState.user.lastName,
+            'email': authState.user.email,
           });
 
-          if (userState.user.imagePath != null &&
-              userState.user.imagePath!.isNotEmpty) {
-            selectedImage = XFile(userState.user.imagePath!);
+          if (authState.user.imagePath != null &&
+              authState.user.imagePath!.isNotEmpty) {
+            selectedImage = XFile(authState.user.imagePath!);
           }
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -75,14 +75,14 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         }
 
-        if (userState is UserError) {
+        if (authState is UserError) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(userState.message)));
+          ).showSnackBar(SnackBar(content: Text(authState.message)));
         }
       },
-      builder: (context, userState) {
-        if (userState is UserLoading) {
+      builder: (context, authState) {
+        if (authState is UserLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -145,9 +145,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            if (form.valid && userState is UserLoaded) {
+                            if (form.valid && authState is UserLoaded) {
                               final updatedUser = UserModel(
-                                userId: userState.user.userId, 
+                                userId: authState.user.userId,
                                 username: form.control('username').value,
                                 firstName: form.control('firstName').value,
                                 lastName: form.control('lastName').value,
@@ -155,9 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 imagePath: selectedImage?.path,
                               );
 
-                              context.read<UserBloc>().add(
-                                UpdateUserEvent(updatedUser),
-                              );
+                              context.read<AuthCubit>().updateUser(updatedUser);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Profile updated!'),

@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/auth/logic/user_bloc.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/auth_layout.dart';
 import 'package:news_watch_app/core/enums/radio_type.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/reactive_forms_widget.dart';
@@ -41,9 +41,9 @@ class _SignUpPageState extends State<SignUpPage> {
     // final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final txt = AppLocalizations.of(context)!;
-    return BlocConsumer<UserBloc, UserState>(
-      listener: (context, userState) {},
-      builder: (context, userState) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, authState) {},
+      builder: (context, authState) {
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: Gaps.large),
@@ -57,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     phoneNumber: form.control('phone').value,
                     password: form.control('password').value,
                   );
-                  context.read<UserBloc>().add(AddUserEvent(user));
+                  context.read<AuthCubit>().addUser(user);
                   Navigator.pushNamed(context, RouteConstants.mainPage);
                 } else {
                   form.markAllAsTouched();
