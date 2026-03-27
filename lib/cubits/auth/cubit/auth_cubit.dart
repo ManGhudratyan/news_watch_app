@@ -1,8 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/domain/repositories/user_repository.dart';
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -10,24 +11,38 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.userRepository) : super(AuthInitial());
 
-  Future<void> getUser() async {
+  Future<void> addUser(UserModel user) async {
     try {
       emit(UserLoading());
-      final user = await userRepository.getUser();
-      emit(UserLoaded(user));
+      await userRepository.saveUserData(user);
+      final updatedUser = await userRepository.getUserByEmailAndPassword(
+        user.email,
+        user.password!,
+      );
+      if (updatedUser != null) {
+        await userRepository.saveLoggedInUser(updatedUser.userId);
+        emit(UserLoaded(updatedUser));
+      }
     } catch (error) {
       emit(UserError(error.toString()));
     }
   }
 
-  Future<void> addUser(UserModel user) async {
+  Future<void> signIn(String email, String password) async {
     try {
       emit(UserLoading());
-      await userRepository.saveUserData(user);
-      final updatedUser = await userRepository.getUser();
-      emit(UserLoaded(updatedUser));
-    } catch (error) {
-      emit(UserError(error.toString()));
+      final user = await userRepository.getUserByEmailAndPassword(
+        email,
+        password,
+      );
+      if (user != null) {
+        await userRepository.saveLoggedInUser(user.userId);
+        emit(UserLoaded(user));
+      } else {
+        emit(UserError("Email or password incorrect"));
+      }
+    } catch (e) {
+      emit(UserError(e.toString()));
     }
   }
 
@@ -46,6 +61,20 @@ class AuthCubit extends Cubit<AuthState> {
       emit(UserLoading());
       await userRepository.userLogout();
       emit(UserLoggedOut());
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+
+  Future<void> getLoggedInUser() async {
+    try {
+      emit(UserLoading());
+      final user = await userRepository.getLoggedInUser();
+      if (user != null) {
+        emit(UserLoaded(user));
+      } else {
+        emit(UserLoggedOut());
+      }
     } catch (e) {
       emit(UserError(e.toString()));
     }

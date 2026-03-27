@@ -24,7 +24,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
-          create: (_) => AuthCubit(userRepository)..getUser(),
+          create: (_) => AuthCubit(userRepository)..getLoggedInUser(),
         ),
         BlocProvider<AddPostCubit>(
           create: (_) => AddPostCubit(addPostRepository),

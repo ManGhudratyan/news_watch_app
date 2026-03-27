@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authState = context.read<AuthCubit>().state;
       if (authState is UserLoaded) {
-        DateTime.now().toIso8601String(); //!change
-        context.read<AddPostCubit>().getPosts(authState.user.userId ?? '');
+        final userId = authState.user.userId ?? '';
+        context.read<AddPostCubit>().getPosts(userId);
       }
     });
   }
@@ -68,50 +68,49 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          String currentUsername = 'Unknown User';
-          String userImage = Assets.userImage;
-          if (authState is UserLoaded) {
-            currentUsername = authState.user.username;
-            if (authState.user.imagePath != null &&
-                authState.user.imagePath!.isNotEmpty) {
-              userImage = authState.user.imagePath!;
-            }
+          if (authState is! UserLoaded) {
+            return const Center(child: CircularProgressIndicator());
           }
 
+          final currentUsername = authState.user.username;
+          final userImage = authState.user.imagePath?.isNotEmpty == true
+              ? authState.user.imagePath!
+              : Assets.userImage;
+
           return BlocBuilder<AddPostCubit, AddPostState>(
-            builder: (context, addPostState) {
-              if (addPostState is AddPostLoading) {
+            builder: (context, state) {
+              if (state.loading) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (addPostState is AddPostLoaded) {
-                final posts = addPostState.posts;
-                if (posts.isEmpty) {
-                  return const Center(child: Text("You haven't posted yet"));
-                }
-                return ListView.builder(
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    final post = posts[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed(
-                          RouteConstants.postDetailsPage,
-                          arguments: post,
-                        );
-                      },
-                      child: PostWidget(
-                        image: post.imagePath ?? Assets.postImage,
-                        postName: post.heading,
-                        username: post.username ?? currentUsername,
-                        userImage: userImage,
-                        description: post.description,
-                      ),
-                    );
-                  },
-                );
-              } else if (addPostState is AddPostFailure) {
-                return Center(child: Text('Error: ${addPostState.error}'));
               }
-              return const Center(child: Text("No posts yet"));
+
+              final posts = state.posts ?? [];
+
+              if (posts.isEmpty) {
+                return const Center(child: Text("You haven't posted yet"));
+              }
+
+              return ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pushNamed(
+                        RouteConstants.postDetailsPage,
+                        arguments: post,
+                      );
+                    },
+                    child: PostWidget(
+                      image: post.imagePath ?? Assets.postImage,
+                      postName: post.heading,
+                      username: post.username ?? currentUsername,
+                      userImage: userImage,
+                      description: post.description,
+                    ),
+                  );
+                },
+              );
             },
           );
         },

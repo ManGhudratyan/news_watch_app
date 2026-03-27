@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthCubit>().getUser();
+    context.read<AuthCubit>().getLoggedInUser();
   }
 
   @override

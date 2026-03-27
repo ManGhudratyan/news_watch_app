@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,15 +70,11 @@ class _AddPostPageState extends State<AddPostPage> {
   Widget build(BuildContext context) {
     return BlocListener<AddPostCubit, AddPostState>(
       listener: (context, state) {
-        if (state is AddPostSuccess) {
+        if (state.posts == true) {
           Navigator.of(
             context,
             rootNavigator: true,
           ).pushNamed(RouteConstants.mainPage);
-        } else if (state is AddPostFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
         }
       },
       child: BlocBuilder<AuthCubit, AuthState>(
@@ -160,7 +158,7 @@ class _AddPostPageState extends State<AddPostPage> {
                     SizedBox(height: Gaps.larger),
                     BlocBuilder<AddPostCubit, AddPostState>(
                       builder: (context, addPostState) {
-                        final isLoading = addPostState is AddPostLoading;
+                        final isLoading = addPostState.loading;
                         return Center(
                           child: ElevatedButton(
                             onPressed: isLoading

@@ -29,4 +29,19 @@ class UserModel {
   });
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  UserModel copyWith({
+    String? username,
+    String? email,
+    String? phoneNumber,
+    String? password,
+    String? userId,
+  }) {
+    return UserModel(
+      username: username ?? this.username,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      password: password ?? this.password,
+      userId: userId ?? this.userId,
+    );
+  }
 }

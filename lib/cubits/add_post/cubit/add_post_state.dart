@@ -1,20 +1,17 @@
 part of 'add_post_cubit.dart';
 
-@immutable
-sealed class AddPostState {}
+class AddPostState extends Equatable {
+  final List<AddPostModel>? posts;
+  final bool loading;
+  const AddPostState({this.posts, this.loading = true});
 
-final class AddPostInitial extends AddPostState {}
+  AddPostState copyWith({List<AddPostModel>? posts, bool? loading}) {
+    return AddPostState(
+      posts: posts ?? this.posts,
+      loading: loading ?? this.loading,
+    );
+  }
 
-class AddPostLoading extends AddPostState {}
-
-class AddPostLoaded extends AddPostState {
-  final List<AddPostModel> posts;
-  AddPostLoaded(this.posts);
+  @override
+  List<Object?> get props => [posts, loading];
 }
-
-class AddPostFailure extends AddPostState {
-  final String error;
-  AddPostFailure(this.error);
-}
-
-class AddPostSuccess extends AddPostState {}

@@ -49,10 +49,7 @@ class _SignInPageState extends State<SignInPage> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text(
-                  "Please write right data",
-                  style: TextStyle(color: Colors.white),
-                ),
+                content: Text(" ", style: TextStyle(color: Colors.white)),
               ),
             );
           }
@@ -64,9 +61,11 @@ class _SignInPageState extends State<SignInPage> {
             padding: EdgeInsets.symmetric(horizontal: Gaps.large),
             child: AuthLayout(
               buttonText: txt.btnSignIn,
-              onPressed: () {
+              onPressed: () async {
                 if (form.valid) {
-                  context.read<AuthCubit>().getUser();
+                  final email = form.control('email').value;
+                  final password = form.control('password').value;
+                  context.read<AuthCubit>().signIn(email, password);
                 } else {
                   form.markAllAsTouched();
                 }

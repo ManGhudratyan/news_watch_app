@@ -1,52 +1,95 @@
+import 'dart:convert';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/domain/repositories/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class UserRepositoryImp implements UserRepository {
+  final String usersKey = 'users';
+  final String loggedInKey = 'loggedInUserId';
+
+  Future<List<UserModel>> _getAllUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final usersJson = prefs.getString(usersKey);
+    if (usersJson == null) return [];
+    final List decoded = jsonDecode(usersJson);
+    return decoded.map((e) => UserModel.fromJson(e)).toList();
+  }
+
+  Future<void> _saveAllUsers(List<UserModel> users) async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded = jsonEncode(users.map((e) => e.toJson()).toList());
+    await prefs.setString(usersKey, encoded);
+  }
+
   @override
   Future<void> saveUserData(UserModel user) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', user.username);
-    await prefs.setString('email', user.email);
-    await prefs.setString('phone', user.phoneNumber ?? '');
-    await prefs.setString('password', user.password ?? '');
-    await prefs.setString('userId', user.userId ?? '');
+    final allUsers = await _getAllUsers();
+
+    if (allUsers.any((u) => u.email == user.email)) {
+      throw Exception("User already exists with this email");
+    }
+
+    final uuid = Uuid();
+    final newUser = user.copyWith(userId: uuid.v4());
+    allUsers.add(newUser);
+    await _saveAllUsers(allUsers);
   }
 
   @override
-  Future<UserModel> getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    return UserModel(
-      username: prefs.getString('username') ?? '',
-      email: prefs.getString('email') ?? '',
-      phoneNumber: prefs.getString('phone') ?? '',
-      password: prefs.getString('password') ?? '',
-      userId: prefs.getString('userId') ?? '',
-    );
-  }
-
-  @override
-  Future<void> updateUser(UserModel user) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', user.username);
-    await prefs.setString('email', user.email);
-    await prefs.setString('phone', user.phoneNumber ?? '');
-    await prefs.setString('password', user.password ?? '');
-    if (user.imagePath != null) {
-      await prefs.setString('imagePath', user.imagePath!);
+  Future<UserModel?> getUserByEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    final allUsers = await _getAllUsers();
+    try {
+      return allUsers.firstWhere(
+        (u) => u.email == email && u.password == password,
+      );
+    } catch (_) {
+      return null;
     }
   }
 
   @override
-  Future<bool> isLoggedIn() async {
+  Future<void> updateUser(UserModel user) async {
+    final allUsers = await _getAllUsers();
+    final index = allUsers.indexWhere((u) => u.userId == user.userId);
+    if (index != -1) {
+      allUsers[index] = user;
+      await _saveAllUsers(allUsers);
+    }
+  }
+
+  @override
+  Future<void> saveLoggedInUser(String? userId) async {
+    if (userId == null) return;
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
-    return userId != null;
+    await prefs.setString(loggedInKey, userId);
+  }
+
+  @override
+  Future<UserModel?> getLoggedInUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString(loggedInKey);
+    if (userId == null) return null;
+    final allUsers = await _getAllUsers();
+    try {
+      return allUsers.firstWhere((u) => u.userId == userId);
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
   Future<void> userLogout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
+    await prefs.remove(loggedInKey);
+  }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(loggedInKey) != null;
   }
 }

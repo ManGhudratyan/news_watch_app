@@ -33,14 +33,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider<AuthCubit>(
-        //   create: (_) => AuthCubit(UserRepositoryImp())..add(GetUserEvent()),
-        // ),
-        // BlocProvider<AddPostCubit>(
-        //   create: (_) => AddPostCubit(addPostRepository: AddPostRepositoryImp()),
-        // ),
         BlocProvider<AuthCubit>(
-          create: (_) => AuthCubit(UserRepositoryImp())..getUser(),
+          create: (_) => AuthCubit(UserRepositoryImp())..getLoggedInUser(),
         ),
         BlocProvider<AddPostCubit>(
           create: (_) => AddPostCubit(AddPostRepositoryImp()),

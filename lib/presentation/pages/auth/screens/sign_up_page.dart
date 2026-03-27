@@ -38,11 +38,19 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final txt = AppLocalizations.of(context)!;
     return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, authState) {},
+      listener: (context, authState) {
+        if (authState is UserError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(authState.message)));
+        }
+        if (authState is UserLoaded) {
+          Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
+        }
+      },
       builder: (context, authState) {
         return Scaffold(
           body: Padding(
@@ -56,9 +64,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     email: form.control('email').value,
                     phoneNumber: form.control('phone').value,
                     password: form.control('password').value,
+                    userId: null, 
                   );
+
                   context.read<AuthCubit>().addUser(user);
-                  Navigator.pushNamed(context, RouteConstants.mainPage);
                 } else {
                   form.markAllAsTouched();
                 }
