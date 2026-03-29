@@ -65,8 +65,8 @@ class _MainPageState extends State<MainPage> {
               textStyle: const TextStyle(fontSize: 10, height: 1.0),
             ),
             PersistentBottomNavBarItem(
-              icon: const Icon(Icons.poll, size: 24),
-              title: "Poll",
+              icon: const Icon(Icons.location_on, size: 24),
+              title: "City",
               activeColorPrimary: Colors.blue,
               inactiveColorPrimary: Colors.grey,
               textStyle: const TextStyle(fontSize: 10, height: 1.0),

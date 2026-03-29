@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     email: form.control('email').value,
                     phoneNumber: form.control('phone').value,
                     password: form.control('password').value,
-                    userId: null, 
+                    userId: null,
                   );
 
                   context.read<AuthCubit>().addUser(user);

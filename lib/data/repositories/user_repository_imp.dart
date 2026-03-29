@@ -92,4 +92,14 @@ class UserRepositoryImp implements UserRepository {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(loggedInKey) != null;
   }
+
+  @override
+  Future<UserModel?> getUserByEmail(String email) async {
+    final users = await _getAllUsers();
+    try {
+      return users.firstWhere((user) => user.email == email);
+    } catch (e) {
+      return null;
+    }
+  }
 }

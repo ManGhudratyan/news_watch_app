@@ -79,4 +79,20 @@ class AuthCubit extends Cubit<AuthState> {
       emit(UserError(e.toString()));
     }
   }
+
+  Future<void> resetPassword(String email, String newPassword) async {
+    try {
+      emit(UserLoading());
+      final user = await userRepository.getUserByEmail(email);
+      if (user == null) {
+        emit(UserError("User not found"));
+        return;
+      }
+      final updatedUser = user.copyWith(password: newPassword);
+      await userRepository.updateUser(updatedUser);
+      emit(UserLoaded(updatedUser));
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
 }
