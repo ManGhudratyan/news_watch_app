@@ -35,6 +35,7 @@ class UserModel {
     String? phoneNumber,
     String? password,
     String? userId,
+    String? userCity,
   }) {
     return UserModel(
       username: username ?? this.username,
@@ -42,6 +43,7 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       password: password ?? this.password,
       userId: userId ?? this.userId,
+      userCity: userCity ?? this.userCity,
     );
   }
 }
