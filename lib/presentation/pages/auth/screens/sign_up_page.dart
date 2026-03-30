@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
@@ -42,12 +43,12 @@ class _SignUpPageState extends State<SignUpPage> {
     final txt = AppLocalizations.of(context)!;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) {
-        if (authState is UserError) {
+        if (authState.error?.isNotEmpty ?? false) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(authState.message)));
+          ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
         }
-        if (authState is UserLoaded) {
+        if (authState.user != null) {
           Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
         }
       },
@@ -63,6 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     username: form.control('username').value,
                     email: form.control('email').value,
                     phoneNumber: form.control('phone').value,
+                    radioType: selectedValue,
                     password: form.control('password').value,
                     userId: null,
                   );

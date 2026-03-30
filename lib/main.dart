@@ -17,7 +17,6 @@ void main() async {
   );
   final userRepository = UserRepositoryImp();
   final addPostRepository = AddPostRepositoryImp();
-
   final isLoggedIn = await userRepository.isLoggedIn();
 
   runApp(

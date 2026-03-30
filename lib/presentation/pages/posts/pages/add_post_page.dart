@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
@@ -79,14 +80,13 @@ class _AddPostPageState extends State<AddPostPage> {
       },
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          if (authState is! UserLoaded) {
+          if (authState.user == null) {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
 
-          final currentUserId = authState.user.userId;
-
+          final currentUserId = authState.user?.userId;
           return Scaffold(
             appBar: AppBar(title: const Text("Add Post")),
             body: Padding(

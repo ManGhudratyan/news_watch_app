@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
@@ -57,17 +58,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) async {
-        if (authState is UserLoaded) {
+        if (authState.user != null) {
           form.patchValue({
-            'username': authState.user.username,
-            'firstName': authState.user.firstName,
-            'lastName': authState.user.lastName,
-            'email': authState.user.email,
+            'username': authState.user?.username,
+            'firstName': authState.user?.firstName,
+            'lastName': authState.user?.lastName,
+            'email': authState.user?.email,
           });
 
-          if (authState.user.imagePath != null &&
-              authState.user.imagePath!.isNotEmpty) {
-            selectedImage = XFile(authState.user.imagePath!);
+          if (authState.user?.imagePath != null &&
+              authState.user!.imagePath!.isNotEmpty) {
+            selectedImage = XFile(authState.user!.imagePath!);
           }
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -75,16 +76,16 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         }
 
-        if (authState is UserError) {
+        if (authState.error?.isNotEmpty ?? false) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(authState.message)));
+          ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
         }
       },
       builder: (context, authState) {
-        if (authState is UserLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        // if (authState.loading == true) {
+        //   return const Center(child: CircularProgressIndicator());
+        // }
 
         return Scaffold(
           appBar: AppBar(title: Text(txt.txtMyProfile), centerTitle: true),
@@ -145,9 +146,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            if (form.valid && authState is UserLoaded) {
+                            if (form.valid && authState.user != null) {
                               final updatedUser = UserModel(
-                                userId: authState.user.userId,
+                                userId: authState.user?.userId,
                                 username: form.control('username').value,
                                 firstName: form.control('firstName').value,
                                 lastName: form.control('lastName').value,

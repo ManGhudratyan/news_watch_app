@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/city_page.dart';
@@ -31,14 +32,14 @@ class _HomePageState extends State<HomePage> {
     ];
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        if (authState is! UserLoaded) {
+        if (authState.user == null) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        final currentUsername = authState.user.username;
-        final userImage = authState.user.imagePath?.isNotEmpty == true
-            ? authState.user.imagePath!
+        final currentUsername = authState.user?.username;
+        final userImage = authState.user?.imagePath?.isNotEmpty == true
+            ? authState.user?.imagePath!
             : Assets.userImage;
         return Scaffold(
           appBar: AppBar(
@@ -53,10 +54,10 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   const Icon(Icons.location_on, color: Colors.red),
-                  const SizedBox(width: 8),
+                  SizedBox(width: Gaps.medium),
                   Text(
-                    authState.user.userCity?.isNotEmpty == true
-                        ? authState.user.userCity!
+                    authState.user?.userCity?.isNotEmpty == true
+                        ? authState.user!.userCity!
                         : 'Select your city...',
                     style: const TextStyle(fontSize: 16),
                   ),
@@ -136,8 +137,9 @@ class _HomePageState extends State<HomePage> {
                           child: PostWidget(
                             image: post.imagePath ?? Assets.postImage,
                             postName: post.heading,
-                            username: post.username ?? currentUsername,
-                            userImage: userImage,
+                            username:
+                                post.username ?? currentUsername ?? 'username',
+                            userImage: userImage ?? Assets.userImage,
                             description: post.description,
                           ),
                         );

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
+import 'package:news_watch_app/presentation/pages/main/profile_page.dart';
 import 'package:news_watch_app/presentation/widgets/list_tile_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -18,7 +20,16 @@ class _SettingsPageState extends State<SettingsPage> {
     final txt = AppLocalizations.of(context)!;
 
     final List<ListTileWidget> items = [
-      ListTileWidget(icon: const Icon(Icons.person), title: txt.txtProfile),
+      ListTileWidget(
+        icon: const Icon(Icons.person),
+        title: txt.txtProfile,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        },
+      ),
       ListTileWidget(icon: const Icon(Icons.wallet), title: txt.txtMyWallet),
       ListTileWidget(
         icon: const Icon(Icons.photo_size_select_actual_outlined),
@@ -61,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, authState) {
-          if (authState is UserLoggedOut) {
+          if (authState.loggedOut == true) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(txt.txtLoggedOutSuccessfully)),
             );
@@ -71,10 +82,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ).pushNamed(RouteConstants.signInPage);
           }
 
-          if (authState is UserError) {
+          if (authState.error?.isNotEmpty ?? false) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(authState.message)));
+            ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
           }
         },
         builder: (context, authState) {

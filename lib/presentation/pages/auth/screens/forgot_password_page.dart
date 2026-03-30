@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/auth_layout.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/reactive_forms_widget.dart';
@@ -36,12 +37,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is UserLoaded) {
-            Navigator.pushNamed(context, RouteConstants.homePage);
-          } else if (state is UserError) {
+          if (state.error?.isNotEmpty ?? false) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ).showSnackBar(SnackBar(content: Text(state.error??'')));
+          } else if (state.user != null) {
+            Navigator.pushNamed(context, RouteConstants.mainPage);
           }
         },
         child: Padding(

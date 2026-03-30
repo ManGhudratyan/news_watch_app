@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/button_widget.dart';
 import 'package:news_watch_app/presentation/pages/main/home_page.dart';
 
@@ -109,13 +110,13 @@ class _CityPageState extends State<CityPage> {
                       final selectedCity = filteredCities[selectedIndex!];
 
                       final authState = context.read<AuthCubit>().state;
-                      if (authState is UserLoaded) {
+                      if (authState.user != null) {
                         final currentUser = authState.user;
 
-                        final updatedUser = currentUser.copyWith(
+                        final updatedUser = currentUser?.copyWith(
                           userCity: selectedCity,
                         );
-                        context.read<AuthCubit>().updateUser(updatedUser);
+                        context.read<AuthCubit>().updateUser(updatedUser!);
                       }
                       Navigator.push(
                         context,

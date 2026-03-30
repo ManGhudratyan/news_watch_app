@@ -1,19 +1,18 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/domain/repositories/user_repository.dart';
-part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final UserRepository userRepository;
 
-  AuthCubit(this.userRepository) : super(AuthInitial());
+  AuthCubit(this.userRepository) : super(AuthState());
 
   Future<void> addUser(UserModel user) async {
     try {
-      emit(UserLoading());
+      emit(state.copyWith(loading: true));
       await userRepository.saveUserData(user);
       final updatedUser = await userRepository.getUserByEmailAndPassword(
         user.email,
@@ -21,78 +20,78 @@ class AuthCubit extends Cubit<AuthState> {
       );
       if (updatedUser != null) {
         await userRepository.saveLoggedInUser(updatedUser.userId);
-        emit(UserLoaded(updatedUser));
+        emit(state.copyWith(user: updatedUser));
       }
     } catch (error) {
-      emit(UserError(error.toString()));
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   Future<void> signIn(String email, String password) async {
     try {
-      emit(UserLoading());
+      emit(state.copyWith(loading: true));
       final user = await userRepository.getUserByEmailAndPassword(
         email,
         password,
       );
       if (user != null) {
         await userRepository.saveLoggedInUser(user.userId);
-        emit(UserLoaded(user));
+        emit(state.copyWith(user: user));
       } else {
-        emit(UserError("Email or password incorrect"));
+        emit(state.copyWith(error: "Email or password incorrect"));
       }
-    } catch (e) {
-      emit(UserError(e.toString()));
+    } catch (error) {
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   Future<void> updateUser(UserModel user) async {
-    emit(UserLoading());
+    emit(state.copyWith(loading: true));
     try {
       await userRepository.updateUser(user);
-      emit(UserLoaded(user));
-    } catch (e) {
-      emit(UserError(e.toString()));
+      emit(state.copyWith(user: user, loading: false));
+    } catch (error) {
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   Future<void> userlogOut() async {
     try {
-      emit(UserLoading());
+      emit(state.copyWith(loading: true));
       await userRepository.userLogout();
-      emit(UserLoggedOut());
-    } catch (e) {
-      emit(UserError(e.toString()));
+      emit(state.copyWith(loggedOut: true));
+    } catch (error) {
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   Future<void> getLoggedInUser() async {
     try {
-      emit(UserLoading());
+      emit(state.copyWith(loading: true));
       final user = await userRepository.getLoggedInUser();
       if (user != null) {
-        emit(UserLoaded(user));
+        emit(state.copyWith(user: user));
       } else {
-        emit(UserLoggedOut());
+        emit(state.copyWith(loggedOut: true));
       }
-    } catch (e) {
-      emit(UserError(e.toString()));
+    } catch (error) {
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   Future<void> resetPassword(String email, String newPassword) async {
     try {
-      emit(UserLoading());
+      emit(state.copyWith(loading: true));
       final user = await userRepository.getUserByEmail(email);
       if (user == null) {
-        emit(UserError("User not found"));
+        emit(state.copyWith(error: "User not found"));
         return;
       }
       final updatedUser = user.copyWith(password: newPassword);
       await userRepository.updateUser(updatedUser);
-      emit(UserLoaded(updatedUser));
-    } catch (e) {
-      emit(UserError(e.toString()));
+      emit(state.copyWith(user: updatedUser));
+    } catch (error) {
+      emit(state.copyWith(error: error.toString()));
     }
   }
 }

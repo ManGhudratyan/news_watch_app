@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/auth_layout.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/reactive_forms_widget.dart';
@@ -33,18 +34,18 @@ class _SignInPageState extends State<SignInPage> {
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) {
-        if (authState is UserError) {
+        if (authState.error?.isNotEmpty??false) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(authState.message)));
+          ).showSnackBar(SnackBar(content: Text(authState.error??'')));
         }
-        if (authState is UserLoaded) {
+        if (authState.user != null) {
           final savedUser = authState.user;
           final enteredEmail = form.control('email').value;
           final enteredPassword = form.control('password').value;
 
-          if (savedUser.email == enteredEmail &&
-              savedUser.password == enteredPassword) {
+          if (savedUser?.email == enteredEmail &&
+              savedUser?.password == enteredPassword) {
             Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:news_watch_app/core/enums/radio_type.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable()
@@ -12,6 +13,7 @@ class UserModel {
   final String? userId;
   final String? firstName;
   final String? userCity;
+  final RadioType? radioType;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -26,6 +28,7 @@ class UserModel {
     this.userId,
     this.firstName,
     this.userCity,
+    this.radioType,
   });
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
@@ -36,6 +39,7 @@ class UserModel {
     String? password,
     String? userId,
     String? userCity,
+    RadioType? radioType,
   }) {
     return UserModel(
       username: username ?? this.username,
@@ -44,6 +48,7 @@ class UserModel {
       password: password ?? this.password,
       userId: userId ?? this.userId,
       userCity: userCity ?? this.userCity,
+      radioType: radioType ?? this.radioType,
     );
   }
 }

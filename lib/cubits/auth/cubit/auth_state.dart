@@ -1,20 +1,27 @@
-part of 'auth_cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:news_watch_app/data/models/user/user_model.dart';
 
-@immutable
-sealed class AuthState {}
+class AuthState extends Equatable {
+  final UserModel? user;
+  final bool loading;
+  final String? error;
+  final bool? loggedOut;
+  const AuthState({this.user, this.loading = true, this.error, this.loggedOut});
 
-final class AuthInitial extends AuthState {}
+  AuthState copyWith({
+    UserModel? user,
+    bool? loading,
+    String? error,
+    bool? loggedOut,
+  }) {
+    return AuthState(
+      user: user ?? this.user,
+      loading: loading ?? this.loading,
+      error: error ?? this.error,
+      loggedOut: loggedOut ?? this.loggedOut,
+    );
+  }
 
-final class UserLoading extends AuthState {}
-
-final class UserLoaded extends AuthState {
-  final UserModel user;
-  UserLoaded(this.user);
+  @override
+  List<Object?> get props => [user, loading, error, loggedOut];
 }
-
-final class UserError extends AuthState {
-  final String message;
-  UserError(this.message);
-}
-
-final class UserLoggedOut extends AuthState {}

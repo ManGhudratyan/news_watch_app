@@ -17,7 +17,6 @@ class AddPostCubit extends Cubit<AddPostState> {
     emit(state.copyWith(loading: true));
     try {
       await addPostRepository.addPosts(model);
-
       final updatedPosts = await addPostRepository.getPosts(
         userId: model.userId,
       );
