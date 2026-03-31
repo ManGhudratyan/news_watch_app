@@ -247,7 +247,7 @@ abstract class AppLocalizations {
   /// No description provided for @txtMyPost.
   ///
   /// In en, this message translates to:
-  /// **'My Post'**
+  /// **'My Posts'**
   String get txtMyPost;
 
   /// No description provided for @txtBoostYourPost.
@@ -381,6 +381,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logged out successfully'**
   String get txtLoggedOutSuccessfully;
+
+  /// No description provided for @txtChooseYourCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Your City'**
+  String get txtChooseYourCity;
+
+  /// No description provided for @txtNoCitiesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No cities found'**
+  String get txtNoCitiesFound;
+
+  /// No description provided for @btnNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get btnNext;
+
+  /// No description provided for @txtUserInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'User Information'**
+  String get txtUserInformation;
+
+  /// No description provided for @txtCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get txtCity;
+
+  /// No description provided for @txtYouTubeVideoLink.
+  ///
+  /// In en, this message translates to:
+  /// **'YouTube Video Link'**
+  String get txtYouTubeVideoLink;
+
+  /// No description provided for @txtExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: https://youtube.com/.....'**
+  String get txtExample;
+
+  /// No description provided for @txtPostVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Post Video'**
+  String get txtPostVideo;
+
+  /// No description provided for @txtFillInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the information below to publish your video'**
+  String get txtFillInformation;
+
+  /// No description provided for @txtPostDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Post Details'**
+  String get txtPostDetails;
+
+  /// No description provided for @txtCreateVideoPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a video post'**
+  String get txtCreateVideoPost;
 }
 
 class _AppLocalizationsDelegate

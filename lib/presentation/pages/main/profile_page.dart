@@ -86,10 +86,6 @@ class _ProfilePageState extends State<ProfilePage> {
               authState.user!.imagePath!.isNotEmpty) {
             selectedImage = XFile(authState.user!.imagePath!);
           }
-
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(content: Text('Profile loaded successfully!')),
-          // );
         }
 
         if (authState.error?.isNotEmpty ?? false) {
@@ -99,10 +95,6 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       },
       builder: (context, authState) {
-        // if (authState.loading == true) {
-        //   return const Center(child: CircularProgressIndicator());
-        // }
-
         return Scaffold(
           appBar: AppBar(title: Text(txt.txtMyProfile), centerTitle: true),
           body: SingleChildScrollView(

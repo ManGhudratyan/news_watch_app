@@ -4,6 +4,7 @@ import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
+import 'package:news_watch_app/presentation/pages/about/about_page.dart';
 import 'package:news_watch_app/presentation/pages/main/profile_page.dart';
 import 'package:news_watch_app/presentation/widgets/list_tile_widget.dart';
 
@@ -30,31 +31,19 @@ class _SettingsPageState extends State<SettingsPage> {
           );
         },
       ),
-      ListTileWidget(icon: const Icon(Icons.wallet), title: txt.txtMyWallet),
       ListTileWidget(
         icon: const Icon(Icons.photo_size_select_actual_outlined),
         title: txt.txtMyPost,
       ),
       ListTileWidget(
-        icon: const Icon(Icons.podcasts),
-        title: txt.txtBoostYourPost,
-      ),
-      ListTileWidget(
-        icon: const Icon(Icons.notifications),
-        title: txt.txtNotifications,
-      ),
-      ListTileWidget(
-        icon: const Icon(Icons.description),
-        title: txt.txtTermsAndConditions,
-      ),
-      ListTileWidget(icon: const Icon(Icons.info_outline), title: txt.txtAbout),
-      ListTileWidget(
-        icon: const Icon(Icons.star_border),
-        title: txt.txtWatchAdsAndEarn,
-      ),
-      ListTileWidget(
-        icon: const Icon(Icons.refresh),
-        title: txt.txtReferAndEarn,
+        icon: const Icon(Icons.info_outline),
+        title: txt.txtAbout,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AboutPage()),
+          );
+        },
       ),
       ListTileWidget(
         icon: const Icon(Icons.logout),
@@ -69,6 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(txt.txtAppBarSettings),
         automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, authState) {

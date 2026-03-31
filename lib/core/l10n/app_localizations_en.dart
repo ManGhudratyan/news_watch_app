@@ -81,7 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txtMyWallet => 'My Wallet';
 
   @override
-  String get txtMyPost => 'My Post';
+  String get txtMyPost => 'My Posts';
 
   @override
   String get txtBoostYourPost => 'Boost Your Post';
@@ -148,4 +148,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txtLoggedOutSuccessfully => 'Logged out successfully';
+
+  @override
+  String get txtChooseYourCity => 'Choose Your City';
+
+  @override
+  String get txtNoCitiesFound => 'No cities found';
+
+  @override
+  String get btnNext => 'Next';
+
+  @override
+  String get txtUserInformation => 'User Information';
+
+  @override
+  String get txtCity => 'City';
+
+  @override
+  String get txtYouTubeVideoLink => 'YouTube Video Link';
+
+  @override
+  String get txtExample => 'Example: https://youtube.com/.....';
+
+  @override
+  String get txtPostVideo => 'Post Video';
+
+  @override
+  String get txtFillInformation =>
+      'Fill in the information below to publish your video';
+
+  @override
+  String get txtPostDetails => 'Post Details';
+
+  @override
+  String get txtCreateVideoPost => 'Create a video post';
 }

@@ -33,6 +33,45 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     return FileImage(File(userImage));
   }
 
+  void _showFullScreenImage(String imagePath) {
+    final bool isAsset = imagePath.startsWith('assets/');
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.all(12),
+          child: Stack(
+            children: [
+              Center(
+                child: InteractiveViewer(
+                  minScale: 0.8,
+                  maxScale: 4.0,
+                  child: isAsset
+                      ? Image.asset(imagePath, fit: BoxFit.contain)
+                      : Image.file(File(imagePath), fit: BoxFit.contain),
+                ),
+              ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black54,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildTopMedia(AddPostModel post, double screenHeight) {
     final hasVideo = post.videoUrl != null && post.videoUrl!.isNotEmpty;
     final hasImage = post.imagePath != null && post.imagePath!.isNotEmpty;
@@ -46,18 +85,18 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     }
 
     if (hasImage) {
-      if (post.imagePath!.startsWith('assets/')) {
-        return SizedBox(
+      final String imagePath = post.imagePath!;
+      final bool isAsset = imagePath.startsWith('assets/');
+
+      return GestureDetector(
+        onTap: () => _showFullScreenImage(imagePath),
+        child: SizedBox(
           width: double.infinity,
           height: screenHeight / 3,
-          child: Image.asset(post.imagePath!, fit: BoxFit.cover),
-        );
-      }
-
-      return SizedBox(
-        width: double.infinity,
-        height: screenHeight / 3,
-        child: Image.file(File(post.imagePath!), fit: BoxFit.cover),
+          child: isAsset
+              ? Image.asset(imagePath, fit: BoxFit.cover)
+              : Image.file(File(imagePath), fit: BoxFit.cover),
+        ),
       );
     }
 

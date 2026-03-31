@@ -8,7 +8,7 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/city_page.dart';
+import 'package:news_watch_app/presentation/pages/main/city_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_widget.dart';
 import 'package:tabbed_sliverlist/tabbed_sliverlist.dart';
 

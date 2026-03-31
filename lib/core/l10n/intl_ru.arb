@@ -24,7 +24,7 @@
     "txtAppBarSettings": "Settings",
     "txtProfile": "Profile",
     "txtMyWallet": "My Wallet",
-    "txtMyPost": "My Post",
+    "txtMyPost": "My Posts",
     "txtBoostYourPost": "Boost Your Post",
     "txtNotifications": "Notifications",
     "txtTermsAndConditions": "Terms and Conditions",
@@ -46,5 +46,16 @@
     "txtSponsored": "Sponsored",
     "txtDescription": "Description",
     "txtUpdateButton": "Update",
-    "txtLoggedOutSuccessfully": "Logged out successfully"
+    "txtLoggedOutSuccessfully": "Logged out successfully",
+    "txtChooseYourCity": "Choose Your City",
+    "txtNoCitiesFound": "No cities found",
+    "btnNext": "Next",
+    "txtUserInformation": "User Information",
+    "txtCity": "City",
+    "txtYouTubeVideoLink": "YouTube Video Link",
+    "txtExample": "Example: https://youtube.com/.....",
+    "txtPostVideo": "Post Video",
+    "txtFillInformation": "Fill in the information below to publish your video",
+    "txtPostDetails": "Post Details",
+    "txtCreateVideoPost": "Create a video post"
 }

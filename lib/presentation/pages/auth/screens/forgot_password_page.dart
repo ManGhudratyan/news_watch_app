@@ -40,7 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           if (state.error?.isNotEmpty ?? false) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.error??'')));
+            ).showSnackBar(SnackBar(content: Text(state.error ?? '')));
           } else if (state.user != null) {
             Navigator.pushNamed(context, RouteConstants.mainPage);
           }
