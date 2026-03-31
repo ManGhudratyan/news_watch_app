@@ -13,6 +13,7 @@ class UserModel {
   final String? userId;
   final String? firstName;
   final String? userCity;
+  final String? videoUrl;
   final RadioType? radioType;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -29,6 +30,7 @@ class UserModel {
     this.firstName,
     this.userCity,
     this.radioType,
+    this.videoUrl,
   });
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
@@ -40,6 +42,10 @@ class UserModel {
     String? userId,
     String? userCity,
     RadioType? radioType,
+    String? videoUrl,
+    String? firstName,
+    String? lastName,
+    String? imagePath,
   }) {
     return UserModel(
       username: username ?? this.username,
@@ -49,6 +55,10 @@ class UserModel {
       userId: userId ?? this.userId,
       userCity: userCity ?? this.userCity,
       radioType: radioType ?? this.radioType,
+      videoUrl: videoUrl ?? this.videoUrl,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      imagePath: imagePath ?? this.imagePath,
     );
   }
 }

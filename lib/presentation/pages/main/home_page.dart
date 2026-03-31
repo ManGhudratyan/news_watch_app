@@ -20,6 +20,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? getYoutubeThumbnail(String? url) {
+    if (url == null || url.isEmpty) return null;
+
+    final uri = Uri.tryParse(url);
+    if (uri == null) return null;
+
+    String? videoId;
+
+    if (uri.host.contains('youtube.com')) {
+      videoId = uri.queryParameters['v'];
+    } else if (uri.host.contains('youtu.be')) {
+      videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
+    }
+
+    if (videoId == null || videoId.isEmpty) return null;
+
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> tabs = [
@@ -30,6 +49,7 @@ class _HomePageState extends State<HomePage> {
       'Healthy',
       'Science',
     ];
+
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
         if (authState.user == null) {
@@ -37,10 +57,12 @@ class _HomePageState extends State<HomePage> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         final currentUsername = authState.user?.username;
         final userImage = authState.user?.imagePath?.isNotEmpty == true
-            ? authState.user?.imagePath!
+            ? authState.user!.imagePath!
             : Assets.userImage;
+
         return Scaffold(
           appBar: AppBar(
             leading: const Icon(Icons.menu),
@@ -94,7 +116,9 @@ class _HomePageState extends State<HomePage> {
               if (state.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
+
               final posts = state.posts ?? [];
+
               return TabbedList(
                 tabLength: tabs.length,
                 sliverTabBar: SliverTabBar(
@@ -103,7 +127,6 @@ class _HomePageState extends State<HomePage> {
                   tabBar: TabBar(
                     isScrollable: true,
                     labelPadding: const EdgeInsets.symmetric(horizontal: 6),
-                    indicatorPadding: EdgeInsets.zero,
                     tabs: tabs.map((tab) => Tab(text: tab)).toList(),
                   ),
                 ),
@@ -124,6 +147,15 @@ class _HomePageState extends State<HomePage> {
                       length: posts.length,
                       builder: (context, index) {
                         final post = posts[index];
+                        final hasLocalImage =
+                            post.imagePath != null &&
+                            post.imagePath!.isNotEmpty;
+
+                        final imageToShow = hasLocalImage
+                            ? post.imagePath!
+                            : (getYoutubeThumbnail(post.videoUrl) ??
+                                  Assets.postImage);
+
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(
@@ -135,12 +167,16 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           child: PostWidget(
-                            image: post.imagePath ?? Assets.postImage,
-                            postName: post.heading,
+                            image: imageToShow,
+                            postName: post.heading ?? 'heading',
                             username:
                                 post.username ?? currentUsername ?? 'username',
-                            userImage: userImage ?? Assets.userImage,
-                            description: post.description,
+                            userImage: userImage,
+                            description: post.description ?? 'description',
+                            isLocalImage: hasLocalImage,
+                            isVideo:
+                                post.videoUrl != null &&
+                                post.videoUrl!.isNotEmpty,
                           ),
                         );
                       },

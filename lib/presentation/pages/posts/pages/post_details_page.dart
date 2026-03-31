@@ -5,6 +5,7 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
+import 'package:news_watch_app/presentation/widgets/youtube_player_widget.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final AddPostModel post;
@@ -16,6 +17,61 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> {
+  ImageProvider _buildUserImage(String userImage) {
+    if (userImage.isEmpty) {
+      return AssetImage(Assets.userImage);
+    }
+
+    if (userImage.startsWith('http')) {
+      return NetworkImage(userImage);
+    }
+
+    if (userImage.startsWith('assets/')) {
+      return AssetImage(userImage);
+    }
+
+    return FileImage(File(userImage));
+  }
+
+  Widget _buildTopMedia(AddPostModel post, double screenHeight) {
+    final hasVideo = post.videoUrl != null && post.videoUrl!.isNotEmpty;
+    final hasImage = post.imagePath != null && post.imagePath!.isNotEmpty;
+
+    if (hasVideo) {
+      return SizedBox(
+        width: double.infinity,
+        height: screenHeight / 3,
+        child: YoutubePlayerWidget(videoUrl: post.videoUrl!),
+      );
+    }
+
+    if (hasImage) {
+      if (post.imagePath!.startsWith('assets/')) {
+        return SizedBox(
+          width: double.infinity,
+          height: screenHeight / 3,
+          child: Image.asset(post.imagePath!, fit: BoxFit.cover),
+        );
+      }
+
+      return SizedBox(
+        width: double.infinity,
+        height: screenHeight / 3,
+        child: Image.file(File(post.imagePath!), fit: BoxFit.cover),
+      );
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      height: screenHeight / 3,
+      child: Container(
+        color: Colors.grey.shade300,
+        alignment: Alignment.center,
+        child: const Icon(Icons.image_not_supported, size: 50),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final post = widget.post;
@@ -32,32 +88,23 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          String username = 'Unknown User';
+          String username = post.username ?? 'Unknown User';
           String userImage = Assets.userImage;
 
           if (authState.user != null) {
-            username = authState.user!.username;
+            username = post.username ?? authState.user!.username;
+
             if (authState.user!.imagePath != null &&
                 authState.user!.imagePath!.isNotEmpty) {
               userImage = authState.user!.imagePath!;
             }
           }
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: screenHeight / 3,
-                  child: post.imagePath != null && post.imagePath!.isNotEmpty
-                      ? (post.imagePath!.startsWith('assets/')
-                            ? Image.asset(post.imagePath!, fit: BoxFit.cover)
-                            : Image.file(
-                                File(post.imagePath!),
-                                fit: BoxFit.cover,
-                              ))
-                      : const SizedBox(),
-                ),
+                _buildTopMedia(post, screenHeight),
                 const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -65,7 +112,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        post.heading,
+                        post.heading ?? 'heading',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -79,12 +126,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             children: [
                               CircleAvatar(
                                 radius: 25,
-                                backgroundImage: (userImage.isNotEmpty)
-                                    ? (userImage.startsWith('assets/')
-                                          ? AssetImage(userImage)
-                                          : FileImage(File(userImage))
-                                                as ImageProvider)
-                                    : AssetImage(Assets.userImage),
+                                backgroundImage: _buildUserImage(userImage),
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -105,23 +147,23 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: const [
                           Row(
-                            children: const [
+                            children: [
                               Icon(Icons.comment_outlined, size: 20),
                               SizedBox(width: 4),
                               Text('8 comments'),
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(Icons.favorite_border, size: 20),
                               SizedBox(width: 4),
                               Text('34 likes'),
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(Icons.share, size: 20),
                               SizedBox(width: 4),
                               Text('Share'),
@@ -131,7 +173,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        post.description,
+                        post.description ?? 'description',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 24),

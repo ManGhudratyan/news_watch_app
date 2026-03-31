@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/data/models/user/user_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/widgets/profile_form_widget.dart';
@@ -47,7 +46,24 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthCubit>().getLoggedInUser();
+
+    final authCubit = context.read<AuthCubit>();
+    final user = authCubit.state.user;
+
+    if (user == null) {
+      authCubit.getLoggedInUser();
+    } else {
+      form.patchValue({
+        'username': user.username,
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'email': user.email,
+      });
+
+      if (user.imagePath != null && user.imagePath!.isNotEmpty) {
+        selectedImage = XFile(user.imagePath!);
+      }
+    }
   }
 
   @override
@@ -71,9 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
             selectedImage = XFile(authState.user!.imagePath!);
           }
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile loaded successfully!')),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(content: Text('Profile loaded successfully!')),
+          // );
         }
 
         if (authState.error?.isNotEmpty ?? false) {
@@ -147,15 +163,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ElevatedButton(
                           onPressed: () {
                             if (form.valid && authState.user != null) {
-                              final updatedUser = UserModel(
-                                userId: authState.user?.userId,
+                              final updatedUser = authState.user!.copyWith(
                                 username: form.control('username').value,
                                 firstName: form.control('firstName').value,
                                 lastName: form.control('lastName').value,
                                 email: form.control('email').value,
                                 imagePath: selectedImage?.path,
                               );
-
                               context.read<AuthCubit>().updateUser(updatedUser);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

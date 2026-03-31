@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/presentation/pages/city_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/pages/add_post_page.dart';
 import 'package:news_watch_app/presentation/pages/main/home_page.dart';
 import 'package:news_watch_app/presentation/pages/main/profile_page.dart';
 import 'package:news_watch_app/presentation/pages/main/settings_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/pages/add_video_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MainPage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
         controller: _controller,
         screens: const [
           HomePage(),
-          CityPage(),
+          AddVideoPage(),
           AddPostPage(),
           SettingsPage(),
           ProfilePage(),
@@ -55,8 +55,8 @@ class _MainPageState extends State<MainPage> {
             textStyle: const TextStyle(fontSize: 10, height: 1.0),
           ),
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.location_on, size: 24),
-            title: "City",
+            icon: const Icon(Icons.video_collection_outlined, size: 24),
+            title: "Video",
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             textStyle: const TextStyle(fontSize: 10, height: 1.0),

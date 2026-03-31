@@ -1,44 +1,32 @@
-// ignore_for_file: unrelated_type_equality_checks
-
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
-import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 
-class AddPostPage extends StatefulWidget {
-  const AddPostPage({super.key});
+class AddVideoPage extends StatefulWidget {
+  const AddVideoPage({super.key});
 
   @override
-  State<AddPostPage> createState() => _AddPostPageState();
+  State<AddVideoPage> createState() => _AddVideoPageState();
 }
 
-class _AddPostPageState extends State<AddPostPage> {
-  final ImagePicker imagePicker = ImagePicker();
-  XFile? selectedImage;
-
+class _AddVideoPageState extends State<AddVideoPage> {
   final TextEditingController headingController = TextEditingController();
-  final TextEditingController tagController = TextEditingController();
-  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController videoController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  Future<void> pickImage() async {
-    final XFile? image = await imagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (image != null) {
-      setState(() => selectedImage = image);
-    }
+  bool isYoutubeUrl(String url) {
+    return url.contains('youtube.com/watch?v=') || url.contains('youtu.be/');
   }
 
-  void _submitPost(BuildContext context, String userId) {
+  void _submitPost(BuildContext context, String userId, String? username) {
+    final videoUrl = videoController.text.trim();
+
     if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -48,12 +36,19 @@ class _AddPostPageState extends State<AddPostPage> {
       return;
     }
 
+    if (videoUrl.isNotEmpty && !isYoutubeUrl(videoUrl)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid YouTube link')),
+      );
+      return;
+    }
+
     final model = AddPostModel(
-      heading: headingController.text,
-      category: categoryController.text,
-      description: descriptionController.text,
-      imagePath: selectedImage?.path,
+      heading: headingController.text.trim(),
+      description: descriptionController.text.trim(),
+      videoUrl: videoUrl.isEmpty ? null : videoUrl,
       userId: userId,
+      username: username,
     );
 
     final addPostCubit = context.read<AddPostCubit>();
@@ -64,6 +59,14 @@ class _AddPostPageState extends State<AddPostPage> {
       context,
       rootNavigator: true,
     ).pushNamed(RouteConstants.mainPage);
+  }
+
+  @override
+  void dispose() {
+    headingController.dispose();
+    videoController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,63 +89,25 @@ class _AddPostPageState extends State<AddPostPage> {
           }
 
           final currentUserId = authState.user?.userId;
+          final currentUsername = authState.user?.username;
+
           return Scaffold(
-            appBar: AppBar(title: const Text("Add Post")),
+            appBar: AppBar(title: const Text("Add Video"), centerTitle: true),
             body: Padding(
               padding: EdgeInsets.all(Gaps.large),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: pickImage,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 207, 206, 206),
-                          borderRadius: BorderRadius.circular(
-                            Constants.borderRadiusCircular,
-                          ),
-                          border: Border.all(color: const Color(0xFFA2A1A1)),
-                        ),
-                        width: Constants.addPostContainerSize,
-                        height: Constants.addPostContainerSize,
-                        child: selectedImage == null
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.add_outlined,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text('Add Post Image'),
-                                ],
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  Constants.borderRadiusCircular,
-                                ),
-                                child: Image.file(
-                                  File(selectedImage!.path),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              ),
-                      ),
-                    ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(
                       title: 'Heading',
                       controller: headingController,
                     ),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Tag', controller: tagController),
-                    SizedBox(height: Gaps.large),
                     PostElementsWidget(
-                      title: 'Category',
-                      controller: categoryController,
+                      title: 'YouTube Video Link',
+                      controller: videoController,
                     ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(
@@ -157,7 +122,11 @@ class _AddPostPageState extends State<AddPostPage> {
                           child: ElevatedButton(
                             onPressed: isLoading
                                 ? null
-                                : () => _submitPost(context, currentUserId!),
+                                : () => _submitPost(
+                                    context,
+                                    currentUserId!,
+                                    currentUsername,
+                                  ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.lightBlueAccent,
                             ),

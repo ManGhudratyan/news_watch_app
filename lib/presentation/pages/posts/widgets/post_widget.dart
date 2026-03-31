@@ -18,6 +18,8 @@ class PostWidget extends StatelessWidget {
     this.isSponsored = false,
     this.commentsCount = 0,
     this.viewsCount = 0,
+    this.isVideo = false,
+    this.isLocalImage = false,
   });
 
   final String image;
@@ -29,6 +31,62 @@ class PostWidget extends StatelessWidget {
   final bool isSponsored;
   final int commentsCount;
   final int viewsCount;
+  final bool isVideo;
+  final bool isLocalImage;
+
+  ImageProvider _buildUserImage() {
+    if (userImage.startsWith('http')) {
+      return NetworkImage(userImage);
+    }
+    if (userImage.startsWith('assets/')) {
+      return AssetImage(userImage);
+    }
+    return FileImage(File(userImage));
+  }
+
+  Widget _buildPostImage() {
+    if (image.isEmpty) {
+      return Image.asset(
+        Assets.postImage,
+        width: double.infinity,
+        height: Constants.postHeight,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (isLocalImage) {
+      return Image.file(
+        File(image),
+        width: double.infinity,
+        height: Constants.postHeight,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (image.startsWith('assets/')) {
+      return Image.asset(
+        image,
+        width: double.infinity,
+        height: Constants.postHeight,
+        fit: BoxFit.cover,
+      );
+    }
+
+    return Image.network(
+      image,
+      width: double.infinity,
+      height: Constants.postHeight,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          Assets.postImage,
+          width: double.infinity,
+          height: Constants.postHeight,
+          fit: BoxFit.cover,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +115,26 @@ class PostWidget extends StatelessWidget {
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(Constants.borderRadiusCircular),
             ),
-            child: image.isEmpty
-                ? Image.asset(
-                    Assets.postImage,
-                    width: double.infinity,
-                    height: Constants.postHeight,
-                    fit: BoxFit.cover,
-                  )
-                : image.startsWith('assets/')
-                ? Image.asset(
-                    image,
-                    width: double.infinity,
-                    height: Constants.postHeight,
-                    fit: BoxFit.cover,
-                  )
-                : Image.file(
-                    File(image),
-                    width: double.infinity,
-                    height: Constants.postHeight,
-                    fit: BoxFit.cover,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildPostImage(),
+                if (isVideo)
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.45),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 34,
+                    ),
                   ),
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(Gaps.large),
@@ -106,9 +164,7 @@ class PostWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 25,
-                      backgroundImage: userImage.startsWith('assets/')
-                          ? AssetImage(userImage)
-                          : FileImage(File(userImage)) as ImageProvider,
+                      backgroundImage: _buildUserImage(),
                     ),
                     SizedBox(width: Constants.sizedBoxSize),
                     Text(
@@ -146,7 +202,7 @@ class PostWidget extends StatelessWidget {
                               const Icon(Icons.campaign, color: Colors.pink),
                               SizedBox(width: Gaps.small),
                               Text(
-                                txt!.txtSponsored,
+                                txt?.txtSponsored ?? 'Sponsored',
                                 style: const TextStyle(color: Colors.pink),
                               ),
                             ],

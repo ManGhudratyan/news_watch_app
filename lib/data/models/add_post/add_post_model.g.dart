@@ -7,14 +7,15 @@ part of 'add_post_model.dart';
 // **************************************************************************
 
 AddPostModel _$AddPostModelFromJson(Map<String, dynamic> json) => AddPostModel(
-  heading: json['heading'] as String,
+  heading: json['heading'] as String?,
   tag: json['tag'] as String?,
-  category: json['category'] as String,
-  description: json['description'] as String,
+  category: json['category'] as String?,
+  description: json['description'] as String?,
   videoLink: json['videoLink'] as String?,
   imagePath: json['imagePath'] as String?,
   userId: json['userId'] as String,
   username: json['username'] as String?,
+  videoUrl: json['videoUrl'] as String?,
 );
 
 Map<String, dynamic> _$AddPostModelToJson(AddPostModel instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$AddPostModelToJson(AddPostModel instance) =>
       'imagePath': instance.imagePath,
       'userId': instance.userId,
       'username': instance.username,
+      'videoUrl': instance.videoUrl,
     };

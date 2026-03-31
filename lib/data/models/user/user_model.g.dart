@@ -17,6 +17,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
   firstName: json['firstName'] as String?,
   userCity: json['userCity'] as String?,
   radioType: $enumDecodeNullable(_$RadioTypeEnumMap, json['radioType']),
+  videoUrl: json['videoUrl'] as String?,
 );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -29,6 +30,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'userId': instance.userId,
   'firstName': instance.firstName,
   'userCity': instance.userCity,
+  'videoUrl': instance.videoUrl,
   'radioType': _$RadioTypeEnumMap[instance.radioType],
 };
 
