@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
@@ -31,19 +32,13 @@ class _AddVideoPageState extends State<AddVideoPage> {
     final videoUrl = videoController.text.trim();
 
     if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill heading and description fields'),
-        ),
-        // showSnackBarMessage("Please fill heading and description fields"),
-      );
+      context.showSnackBarMessage("Please fill heading and description fields");
+
       return;
     }
 
     if (videoUrl.isNotEmpty && !isYoutubeUrl(videoUrl)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid YouTube link')),
-      );
+      context.showSnackBarMessage("Please enter a valid YouTube link");
       return;
     }
 
@@ -167,18 +162,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           alignment: AlignmentGeometry.center,
                           child: Text(
                             txt.txtPostDetails,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: Gaps.medium),
-                        Text(
-                          txt.txtFillInformation,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         SizedBox(height: Gaps.large),

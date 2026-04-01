@@ -16,9 +16,7 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
   @override
   void initState() {
     super.initState();
-
     final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
-
     if (videoId != null) {
       _controller = YoutubePlayerController(
         initialVideoId: videoId,

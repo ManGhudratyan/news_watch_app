@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/enums/radio_type.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -127,6 +128,12 @@ class AboutPage extends StatelessWidget {
                         icon: Icons.phone_in_talk_outlined,
                         title: text.txtPhoneNumber,
                         value: user.phoneNumber ?? text.txtPhoneNumber,
+                      ),
+                      const Divider(),
+                      UserInfoWidget(
+                        icon: Icons.report_gmailerrorred,
+                        title: text.txtIamA,
+                        value: (user.radioType ?? RadioType.visitor).name,
                       ),
                     ],
                   ),

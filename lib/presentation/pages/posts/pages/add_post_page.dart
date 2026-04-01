@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -40,11 +41,7 @@ class _AddPostPageState extends State<AddPostPage> {
 
   void _submitPost(BuildContext context, String userId) {
     if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill heading and description fields'),
-        ),
-      );
+      context.showSnackBarMessage("Please fill heading and description fields");
       return;
     }
 

@@ -174,10 +174,6 @@ class AppLocalizationsAm extends AppLocalizations {
   String get txtPostVideo => 'Post Video';
 
   @override
-  String get txtFillInformation =>
-      'Fill in the information below to publish your video';
-
-  @override
   String get txtPostDetails => 'Post Details';
 
   @override

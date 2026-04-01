@@ -430,12 +430,6 @@ abstract class AppLocalizations {
   /// **'Post Video'**
   String get txtPostVideo;
 
-  /// No description provided for @txtFillInformation.
-  ///
-  /// In en, this message translates to:
-  /// **'Fill in the information below to publish your video'**
-  String get txtFillInformation;
-
   /// No description provided for @txtPostDetails.
   ///
   /// In en, this message translates to:

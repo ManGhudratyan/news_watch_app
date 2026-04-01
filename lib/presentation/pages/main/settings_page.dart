@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
@@ -32,10 +33,6 @@ class _SettingsPageState extends State<SettingsPage> {
         },
       ),
       ListTileWidget(
-        icon: const Icon(Icons.photo_size_select_actual_outlined),
-        title: txt.txtMyPost,
-      ),
-      ListTileWidget(
         icon: const Icon(Icons.info_outline),
         title: txt.txtAbout,
         onTap: () {
@@ -63,9 +60,8 @@ class _SettingsPageState extends State<SettingsPage> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, authState) {
           if (authState.loggedOut == true) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(txt.txtLoggedOutSuccessfully)),
-            );
+            context.showSnackBarMessage(txt.txtLoggedOutSuccessfully);
+
             Navigator.of(
               context,
               rootNavigator: true,
@@ -73,9 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
           }
 
           if (authState.error?.isNotEmpty ?? false) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
+            context.showSnackBarMessage(authState.error ?? 'error');
           }
         },
         builder: (context, authState) {

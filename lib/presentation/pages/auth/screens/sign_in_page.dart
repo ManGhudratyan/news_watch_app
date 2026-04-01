@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
@@ -34,10 +35,8 @@ class _SignInPageState extends State<SignInPage> {
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) {
-        if (authState.error?.isNotEmpty??false) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(authState.error??'')));
+        if (authState.error?.isNotEmpty ?? false) {
+          context.showSnackBarMessage(authState.error ?? 'error');
         }
         if (authState.user != null) {
           final savedUser = authState.user;
@@ -48,11 +47,7 @@ class _SignInPageState extends State<SignInPage> {
               savedUser?.password == enteredPassword) {
             Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(" ", style: TextStyle(color: Colors.white)),
-              ),
-            );
+            context.showSnackBarMessage(" ");
           }
         }
       },

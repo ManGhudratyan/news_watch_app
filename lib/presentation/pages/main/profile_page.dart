@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -89,9 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
 
         if (authState.error?.isNotEmpty ?? false) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
+          context.showSnackBarMessage(authState.error ?? 'error');
         }
       },
       builder: (context, authState) {

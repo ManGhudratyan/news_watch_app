@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
@@ -38,9 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state.error?.isNotEmpty ?? false) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error ?? '')));
+            context.showSnackBarMessage(state.error ?? 'error');
           } else if (state.user != null) {
             Navigator.pushNamed(context, RouteConstants.mainPage);
           }

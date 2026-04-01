@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
@@ -44,9 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) {
         if (authState.error?.isNotEmpty ?? false) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(authState.error ?? '')));
+          context.showSnackBarMessage(authState.error ?? '');
         }
         if (authState.user != null) {
           Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
