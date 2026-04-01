@@ -57,3 +57,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//forgot password, about page, saved posts, liked posts
