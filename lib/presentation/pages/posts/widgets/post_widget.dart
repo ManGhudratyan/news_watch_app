@@ -27,70 +27,57 @@ class PostWidget extends StatelessWidget {
   final String userImage;
   final String username;
   final String description;
-
   final bool isSponsored;
   final int commentsCount;
   final int viewsCount;
   final bool isVideo;
   final bool isLocalImage;
 
-  ImageProvider _buildUserImage() {
-    if (userImage.startsWith('http')) {
-      return NetworkImage(userImage);
-    }
-    if (userImage.startsWith('assets/')) {
-      return AssetImage(userImage);
-    }
-    return FileImage(File(userImage));
-  }
-
-  Widget _buildPostImage() {
-    if (image.isEmpty) {
-      return Image.asset(
-        Assets.postImage,
-        width: double.infinity,
-        height: Constants.postHeight,
-        fit: BoxFit.cover,
-      );
-    }
-
-    if (isLocalImage) {
-      return Image.file(
-        File(image),
-        width: double.infinity,
-        height: Constants.postHeight,
-        fit: BoxFit.cover,
-      );
-    }
-
-    if (image.startsWith('assets/')) {
-      return Image.asset(
-        image,
-        width: double.infinity,
-        height: Constants.postHeight,
-        fit: BoxFit.cover,
-      );
-    }
-
-    return Image.network(
-      image,
-      width: double.infinity,
-      height: Constants.postHeight,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Image.asset(
-          Assets.postImage,
-          width: double.infinity,
-          height: Constants.postHeight,
-          fit: BoxFit.cover,
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final txt = AppLocalizations.of(context);
+
+    ImageProvider userImg = userImage.startsWith('http')
+        ? NetworkImage(userImage)
+        : userImage.startsWith('assets/')
+        ? AssetImage(userImage)
+        : FileImage(File(userImage));
+
+    Widget postImg = image.isEmpty
+        ? Image.asset(
+            Assets.postImage,
+            width: double.infinity,
+            height: Constants.postHeight,
+            fit: BoxFit.cover,
+          )
+        : isLocalImage
+        ? Image.file(
+            File(image),
+            width: double.infinity,
+            height: Constants.postHeight,
+            fit: BoxFit.cover,
+          )
+        : image.startsWith('assets/')
+        ? Image.asset(
+            image,
+            width: double.infinity,
+            height: Constants.postHeight,
+            fit: BoxFit.cover,
+          )
+        : Image.network(
+            image,
+            width: double.infinity,
+            height: Constants.postHeight,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stacktrace) {
+              return Image.asset(
+                Assets.postImage,
+                width: double.infinity,
+                height: Constants.postHeight,
+                fit: BoxFit.cover,
+              );
+            },
+          );
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -118,7 +105,7 @@ class PostWidget extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                _buildPostImage(),
+                postImg,
                 if (isVideo)
                   Container(
                     width: 56,
@@ -162,10 +149,7 @@ class PostWidget extends StatelessWidget {
                 SizedBox(height: Constants.sizedBoxSize),
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundImage: _buildUserImage(),
-                    ),
+                    CircleAvatar(radius: 25, backgroundImage: userImg),
                     SizedBox(width: Constants.sizedBoxSize),
                     Text(
                       username,

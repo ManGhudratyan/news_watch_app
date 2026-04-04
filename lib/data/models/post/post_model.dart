@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'add_post_model.g.dart';
+part 'post_model.g.dart';
 
 @JsonSerializable()
-class AddPostModel {
+class PostModel {
   final String? heading;
   final String? tag;
   final String? category;
@@ -12,11 +12,12 @@ class AddPostModel {
   final String userId;
   final String? username;
   final String? videoUrl;
+  final String? userLike;
 
-  factory AddPostModel.fromJson(Map<String, dynamic> json) =>
-      _$AddPostModelFromJson(json);
+  factory PostModel.fromJson(Map<String, dynamic> json) =>
+      _$PostModelFromJson(json);
 
-  AddPostModel({
+  PostModel({
     this.heading,
     this.tag,
     this.category,
@@ -26,7 +27,8 @@ class AddPostModel {
     required this.userId,
     this.username,
     this.videoUrl,
+    this.userLike,
   });
 
-  Map<String, dynamic> toJson() => _$AddPostModelToJson(this);
+  Map<String, dynamic> toJson() => _$PostModelToJson(this);
 }

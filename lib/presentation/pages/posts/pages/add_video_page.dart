@@ -8,7 +8,7 @@ import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
+import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
 
@@ -42,7 +42,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
       return;
     }
 
-    final model = AddPostModel(
+    final model = PostModel(
       heading: headingController.text.trim(),
       description: descriptionController.text.trim(),
       videoUrl: videoUrl.isEmpty ? null : videoUrl,

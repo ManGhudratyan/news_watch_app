@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
+import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/widgets/youtube_player_widget.dart';
 
 class PostDetailsPage extends StatefulWidget {
-  final AddPostModel post;
+  final PostModel post;
 
   const PostDetailsPage({super.key, required this.post});
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
-import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
+import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/forgot_password_page.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/sign_up_page.dart';
 import 'package:news_watch_app/presentation/pages/main/city_page.dart';
@@ -37,7 +37,7 @@ class Routes {
       case RouteConstants.cityPage:
         return MaterialPageRoute(builder: (_) => const CityPage());
       case RouteConstants.postDetailsPage:
-        final post = settings.arguments as AddPostModel;
+        final post = settings.arguments as PostModel;
         return MaterialPageRoute(builder: (_) => PostDetailsPage(post: post));
       default:
         return MaterialPageRoute(

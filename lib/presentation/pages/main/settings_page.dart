@@ -53,15 +53,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(txt.txtAppBarSettings),
+        title: Text(
+          txt.txtAppBarSettings,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+        ),
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, authState) {
           if (authState.loggedOut == true) {
             context.showSnackBarMessage(txt.txtLoggedOutSuccessfully);
-
             Navigator.of(
               context,
               rootNavigator: true,

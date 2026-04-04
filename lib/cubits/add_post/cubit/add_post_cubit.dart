@@ -2,18 +2,18 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:news_watch_app/data/models/add_post/add_post_model.dart';
+import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/domain/repositories/add_post_repository.dart';
 
 part 'add_post_state.dart';
 
 class AddPostCubit extends Cubit<AddPostState> {
   final AddPostRepository addPostRepository;
-  List<AddPostModel> posts = [];
+  List<PostModel> posts = [];
   AddPostCubit(this.addPostRepository)
     : super(const AddPostState(posts: [], loading: false));
 
-  Future<void> addNewPost(AddPostModel model) async {
+  Future<void> addNewPost(PostModel model) async {
     emit(state.copyWith(loading: true));
     try {
       await addPostRepository.addPosts(model);
