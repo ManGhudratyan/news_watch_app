@@ -2,7 +2,8 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:news_watch_app/core/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
@@ -35,8 +36,6 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final txt = AppLocalizations.of(context);
-
     ImageProvider userImg = userImage.startsWith('http')
         ? NetworkImage(userImage)
         : userImage.startsWith('assets/')
@@ -131,7 +130,7 @@ class PostWidget extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
+                    Expanded(
                       child: Text(
                         postName,
                         maxLines: 2,
@@ -142,7 +141,6 @@ class PostWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: Gaps.medium),
                     const Icon(Icons.more_vert),
                   ],
                 ),
@@ -173,24 +171,29 @@ class PostWidget extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.favorite_border),
+                        BlocBuilder<AddPostCubit, AddPostState>(
+                          builder: (context, state) {
+                            final isLiked = (state.likedPosts ?? []).any(
+                              (item) =>
+                                  item.heading == postName &&
+                                  item.description == description,
+                            );
+
+                            return GestureDetector(
+                              onTap: () {},
+                              child: Icon(
+                                isLiked
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isLiked ? Colors.red : Colors.black,
+                              ),
+                            );
+                          },
+                        ),
                         SizedBox(width: Constants.sizedBoxSize),
                         const Icon(Icons.chat_bubble_outline),
                         SizedBox(width: Constants.sizedBoxSize),
                         const Icon(Icons.share_outlined),
-                        SizedBox(width: Constants.sizedBoxSize),
-                        if (isSponsored)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const Icon(Icons.campaign, color: Colors.pink),
-                              SizedBox(width: Gaps.small),
-                              Text(
-                                txt?.txtSponsored ?? 'Sponsored',
-                                style: const TextStyle(color: Colors.pink),
-                              ),
-                            ],
-                          ),
                       ],
                     ),
                     SizedBox(height: Constants.sizedBoxSize),
@@ -199,7 +202,7 @@ class PostWidget extends StatelessWidget {
                       children: [
                         const SizedBox(),
                         Text(
-                          "$commentsCount comments · $viewsCount views",
+                          "$commentsCount comments . $viewsCount views",
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 12,

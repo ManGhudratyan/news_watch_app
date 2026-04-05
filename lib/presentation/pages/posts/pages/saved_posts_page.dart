@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/core/utils/video_utils.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
@@ -36,6 +37,9 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
           final currentUsername = authState.user?.username ?? 'username';
+          final userImage = authState.user?.imagePath?.isNotEmpty == true
+              ? authState.user!.imagePath!
+              : Assets.userImage;
 
           return BlocBuilder<AddPostCubit, AddPostState>(
             builder: (context, state) {
@@ -52,6 +56,11 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                   final hasLocalImage =
                       post.imagePath != null && post.imagePath!.isNotEmpty;
 
+                  final imageToShow = hasLocalImage
+                      ? post.imagePath!
+                      : (VideoUtils.getYoutubeThumbnail(post.videoUrl) ??
+                            Assets.postImage);
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushNamed(
@@ -60,10 +69,10 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                       );
                     },
                     child: PostWidget(
-                      image: hasLocalImage ? post.imagePath! : Assets.postImage,
+                      image: imageToShow,
                       postName: post.heading ?? 'heading',
                       username: post.username ?? currentUsername,
-                      userImage: Assets.userImage,
+                      userImage: userImage,
                       description: post.description ?? 'description',
                       isLocalImage: hasLocalImage,
                       isVideo:

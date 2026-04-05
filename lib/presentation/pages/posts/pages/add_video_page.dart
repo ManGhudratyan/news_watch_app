@@ -8,7 +8,6 @@ import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
 
@@ -23,42 +22,6 @@ class _AddVideoPageState extends State<AddVideoPage> {
   final TextEditingController headingController = TextEditingController();
   final TextEditingController videoController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-
-  bool isYoutubeUrl(String url) {
-    return url.contains('youtube.com/watch?v=') || url.contains('youtu.be/');
-  }
-
-  void _submitPost(BuildContext context, String userId, String? username) {
-    final videoUrl = videoController.text.trim();
-
-    if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
-      context.showSnackBarMessage("Please fill heading and description fields");
-
-      return;
-    }
-
-    if (videoUrl.isNotEmpty && !isYoutubeUrl(videoUrl)) {
-      context.showSnackBarMessage("Please enter a valid YouTube link");
-      return;
-    }
-
-    final model = PostModel(
-      heading: headingController.text.trim(),
-      description: descriptionController.text.trim(),
-      videoUrl: videoUrl.isEmpty ? null : videoUrl,
-      userId: userId,
-      username: username,
-    );
-
-    final addPostCubit = context.read<AddPostCubit>();
-    addPostCubit.addNewPost(model);
-    addPostCubit.getPosts(userId);
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).pushNamed(RouteConstants.mainPage);
-  }
 
   @override
   void dispose() {
@@ -216,11 +179,32 @@ class _AddVideoPageState extends State<AddVideoPage> {
                                 child: ElevatedButton(
                                   onPressed: isLoading
                                       ? null
-                                      : () => _submitPost(
-                                          context,
-                                          currentUserId!,
-                                          currentUsername,
-                                        ),
+                                      : () async {
+                                          final message = await context
+                                              .read<AddPostCubit>()
+                                              .submitVideoPost(
+                                                heading: headingController.text,
+                                                description:
+                                                    descriptionController.text,
+                                                userId: currentUserId!,
+                                                username: currentUsername,
+                                                videoUrl: videoController.text,
+                                              );
+
+                                          if (!context.mounted) return;
+
+                                          if (message != null) {
+                                            context.showSnackBarMessage(
+                                              message,
+                                            );
+                                            return;
+                                          }
+
+                                          Navigator.of(
+                                            context,
+                                            rootNavigator: true,
+                                          ).pushNamed(RouteConstants.mainPage);
+                                        },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     shadowColor: Colors.transparent,

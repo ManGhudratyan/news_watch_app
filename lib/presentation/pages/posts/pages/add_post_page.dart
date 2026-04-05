@@ -6,7 +6,6 @@ import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
-import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
@@ -36,31 +35,6 @@ class _AddPostPageState extends State<AddPostPage> {
     if (image != null) {
       setState(() => selectedImage = image);
     }
-  }
-
-  void _submitPost(BuildContext context, String userId) {
-    if (headingController.text.isEmpty || descriptionController.text.isEmpty) {
-      context.showSnackBarMessage("Please fill heading and description fields");
-      return;
-    }
-
-    final model = PostModel(
-      heading: headingController.text,
-      category: selectedCategory,
-      description: descriptionController.text,
-      imagePath: selectedImage?.path,
-      userId: userId,
-      postCreated: DateTime.now(),
-    );
-
-    final addPostCubit = context.read<AddPostCubit>();
-    addPostCubit.addNewPost(model);
-    addPostCubit.getPosts(userId);
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).pushNamed(RouteConstants.mainPage);
   }
 
   @override
@@ -189,7 +163,33 @@ class _AddPostPageState extends State<AddPostPage> {
                           child: ElevatedButton(
                             onPressed: isLoading
                                 ? null
-                                : () => _submitPost(context, currentUserId!),
+                                : () async {
+                                    final success = await context
+                                        .read<AddPostCubit>()
+                                        .submitPost(
+                                          heading: headingController.text,
+                                          description:
+                                              descriptionController.text,
+                                          category: selectedCategory,
+                                          userId: currentUserId!,
+                                          imagePath: selectedImage?.path,
+                                          tag: tagController.text,
+                                          username: authState.user?.username,
+                                        );
+
+                                    if (!context.mounted) return;
+
+                                    if (success) {
+                                      Navigator.of(
+                                        context,
+                                        rootNavigator: true,
+                                      ).pushNamed(RouteConstants.mainPage);
+                                    } else {
+                                      context.showSnackBarMessage(
+                                        "Please fill heading and description fields",
+                                      );
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.lightBlueAccent,
                             ),

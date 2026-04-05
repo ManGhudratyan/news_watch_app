@@ -48,19 +48,19 @@ class _MainPageState extends State<MainPage> {
         title: "Home",
         activeColorPrimary: Colors.blue,
         inactiveColorPrimary: Colors.grey,
-        textStyle: const TextStyle(fontSize: 10, height: 1.0),
+        textStyle: const TextStyle(fontSize: 10, height: 0.8),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.video_collection_outlined, size: 24),
         title: "Video",
         activeColorPrimary: Colors.blue,
         inactiveColorPrimary: Colors.grey,
-        textStyle: const TextStyle(fontSize: 10, height: 1.0),
+        textStyle: const TextStyle(fontSize: 10, height: 0.8),
       ),
       PersistentBottomNavBarItem(
         icon: Container(
-          width: 60,
-          height: 60,
+          width: 50,
+          height: 50,
           decoration: BoxDecoration(
             color: Colors.blue,
             shape: BoxShape.circle,
@@ -80,7 +80,7 @@ class _MainPageState extends State<MainPage> {
         title: "Settings",
         activeColorPrimary: Colors.blue,
         inactiveColorPrimary: Colors.grey,
-        textStyle: const TextStyle(fontSize: 10, height: 1.0),
+        textStyle: const TextStyle(fontSize: 10, height: 0.8),
       ),
       PersistentBottomNavBarItem(
         icon: CircleAvatar(
@@ -95,7 +95,7 @@ class _MainPageState extends State<MainPage> {
         title: "Profile",
         activeColorPrimary: Colors.blue,
         inactiveColorPrimary: Colors.grey,
-        textStyle: const TextStyle(fontSize: 10, height: 1.0),
+        textStyle: const TextStyle(fontSize: 10, height: 0.8),
       ),
     ];
   }

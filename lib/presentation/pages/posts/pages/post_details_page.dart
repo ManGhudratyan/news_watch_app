@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/utils/date_utils.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -19,23 +20,39 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> {
-  String formatPostTime(DateTime? dateTime) {
-    if (dateTime == null) return 'Unknown';
-
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inMinutes < 1) {
-      return 'Just now';
-    } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} min ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours} hour ago';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays} day ago';
-    } else {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    }
+  void _showFullScreenVideo(String videoUrl) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black,
+      builder: (context) {
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Center(
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: YoutubePlayerWidget(videoUrl: videoUrl),
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black54,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showFullScreenImage(String imagePath) {
@@ -141,10 +158,31 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           final hasImage = post.imagePath != null && post.imagePath!.isNotEmpty;
 
           if (hasVideo) {
-            mediaWidget = SizedBox(
-              width: double.infinity,
-              height: screenHeight / 3,
-              child: YoutubePlayerWidget(videoUrl: post.videoUrl!),
+            mediaWidget = GestureDetector(
+              onTap: () => _showFullScreenVideo(post.videoUrl!),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: screenHeight / 3,
+                    child: YoutubePlayerWidget(videoUrl: post.videoUrl!),
+                  ),
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.45),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.fullscreen,
+                      color: Colors.white,
+                      size: 34,
+                    ),
+                  ),
+                ],
+              ),
             );
           } else if (hasImage) {
             final imagePath = post.imagePath!;
@@ -211,7 +249,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             ],
                           ),
                           Text(
-                            formatPostTime(post.postCreated),
+                            DateUtilsHelper.formatPostTime(post.postCreated),
                             style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -230,12 +268,36 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               Text('8 comments'),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Icon(Icons.favorite_border, size: 20),
-                              SizedBox(width: Gaps.small),
-                              Text('34 likes'),
-                            ],
+                          BlocBuilder<AddPostCubit, AddPostState>(
+                            builder: (context, state) {
+                              final isLiked = (state.likedPosts ?? []).any(
+                                (item) =>
+                                    item.heading == post.heading &&
+                                    item.description == post.description &&
+                                    item.postCreated == post.postCreated,
+                              );
+
+                              return InkWell(
+                                onTap: () async {
+                                  await context
+                                      .read<AddPostCubit>()
+                                      .toggleLikePost(post);
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      isLiked
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      size: 20,
+                                      color: isLiked ? Colors.red : null,
+                                    ),
+                                    SizedBox(width: Gaps.small),
+                                    Text(isLiked ? 'Liked' : 'Like'),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           InkWell(
                             onTap: () {

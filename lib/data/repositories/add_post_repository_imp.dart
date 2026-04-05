@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AddPostRepositoryImp implements AddPostRepository {
   String _postsKey(String userId) => "user_posts_$userId";
   String _savedPostsKey(String userId) => "saved_posts_$userId";
+  String _likedPostsKey(String userId) => "liked_posts_$userId";
 
   @override
   Future<void> addPosts(PostModel model) async {
@@ -118,6 +119,89 @@ class AddPostRepositoryImp implements AddPostRepository {
         List<Map<String, dynamic>>.from(json.decode(savedPostsJson));
 
     return savedPosts.any(
+      (item) =>
+          item['heading'] == post.heading &&
+          item['description'] == post.description &&
+          item['postCreated'] == post.postCreated?.toIso8601String(),
+    );
+  }
+
+  @override
+  Future<void> likePost(PostModel post) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final key = _likedPostsKey(post.userId);
+    final String? likedPostsJson = sharedPrefs.getString(key);
+
+    List<Map<String, dynamic>> likedPosts = [];
+    if (likedPostsJson != null) {
+      likedPosts = List<Map<String, dynamic>>.from(json.decode(likedPostsJson));
+    }
+
+    final alreadyLiked = likedPosts.any(
+      (item) =>
+          item['heading'] == post.heading &&
+          item['description'] == post.description &&
+          item['postCreated'] == post.postCreated?.toIso8601String(),
+    );
+
+    if (!alreadyLiked) {
+      likedPosts.add(post.toJson());
+      await sharedPrefs.setString(key, json.encode(likedPosts));
+    }
+  }
+
+  @override
+  Future<void> removeLikedPost(PostModel post) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final key = _likedPostsKey(post.userId);
+    final String? likedPostsJson = sharedPrefs.getString(key);
+
+    if (likedPostsJson == null) return;
+
+    List<Map<String, dynamic>> likedPosts = List<Map<String, dynamic>>.from(
+      json.decode(likedPostsJson),
+    );
+
+    likedPosts.removeWhere(
+      (item) =>
+          item['heading'] == post.heading &&
+          item['description'] == post.description &&
+          item['postCreated'] == post.postCreated?.toIso8601String(),
+    );
+
+    await sharedPrefs.setString(key, json.encode(likedPosts));
+  }
+
+  @override
+  Future<List<PostModel>> getLikedPosts({required String userId}) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final key = _likedPostsKey(userId);
+    final String? likedPostsJson = sharedPrefs.getString(key);
+
+    if (likedPostsJson == null) return [];
+
+    final List<Map<String, dynamic>> likedPosts =
+        List<Map<String, dynamic>>.from(json.decode(likedPostsJson));
+
+    return likedPosts
+        .map((json) => PostModel.fromJson(json))
+        .toList()
+        .reversed
+        .toList();
+  }
+
+  @override
+  Future<bool> isPostLiked(PostModel post) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final key = _likedPostsKey(post.userId);
+    final String? likedPostsJson = sharedPrefs.getString(key);
+
+    if (likedPostsJson == null) return false;
+
+    final List<Map<String, dynamic>> likedPosts =
+        List<Map<String, dynamic>>.from(json.decode(likedPostsJson));
+
+    return likedPosts.any(
       (item) =>
           item['heading'] == post.heading &&
           item['description'] == post.description &&

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
+import 'package:news_watch_app/core/utils/video_utils.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -30,23 +31,21 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
 
-  String? getYoutubeLinkContains(String? url) {
-    if (url == null || url.isEmpty) return null;
+  @override
+  void initState() {
+    super.initState();
 
-    final uri = Uri.tryParse(url); // host, path,query parametr
-    if (uri == null) return null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = context.read<AuthCubit>().state.user?.userId;
 
-    String? videoId;
+      if (userId != null && userId.isNotEmpty) {
+        final cubit = context.read<AddPostCubit>();
 
-    if (uri.host.contains('youtube.com')) {
-      videoId = uri.queryParameters['v'];
-    } else if (uri.host.contains('youtu.be')) {
-      videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
-    }
-
-    if (videoId == null || videoId.isEmpty) return null;
-
-    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+        cubit.getPosts(userId);
+        cubit.getSavedPosts(userId);
+        cubit.getLikedPosts(userId);
+      }
+    });
   }
 
   @override
@@ -311,7 +310,9 @@ class _HomePageState extends State<HomePage> {
 
                                 final imageToShow = hasLocalImage
                                     ? post.imagePath!
-                                    : (getYoutubeLinkContains(post.videoUrl) ??
+                                    : (VideoUtils.getYoutubeThumbnail(
+                                            post.videoUrl,
+                                          ) ??
                                           Assets.postImage);
 
                                 return GestureDetector(
