@@ -19,7 +19,6 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final FormGroup form = FormGroup({
-    'username': FormControl<String>(validators: [Validators.required]),
     'email': FormControl<String>(
       validators: [Validators.required, Validators.email],
     ),
@@ -70,12 +69,6 @@ class _SignInPageState extends State<SignInPage> {
                 formGroup: form,
                 child: Column(
                   children: [
-                    ReactiveFormsWidget(
-                      title: txt.txtUsername,
-                      formControl:
-                          form.control('username') as FormControl<String>,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
                     ReactiveFormsWidget(
                       title: txt.txtEmail,
                       formControl: form.control('email') as FormControl<String>,

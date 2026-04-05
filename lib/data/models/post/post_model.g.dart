@@ -17,9 +17,14 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
   username: json['username'] as String?,
   videoUrl: json['videoUrl'] as String?,
   userLike: json['userLike'] as String?,
+  postCreated: json['postCreated'] == null
+      ? null
+      : DateTime.parse(json['postCreated'] as String),
+  id: json['id'] as String?,
 );
 
 Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
+  'id': instance.id,
   'heading': instance.heading,
   'tag': instance.tag,
   'category': instance.category,
@@ -30,4 +35,5 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
   'username': instance.username,
   'videoUrl': instance.videoUrl,
   'userLike': instance.userLike,
+  'postCreated': instance.postCreated?.toIso8601String(),
 };

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/data/models/post/post_model.dart';
@@ -18,6 +19,25 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> {
+  String formatPostTime(DateTime? dateTime) {
+    if (dateTime == null) return 'Unknown';
+
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} min ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hour ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} day ago';
+    } else {
+      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+    }
+  }
+
   void _showFullScreenImage(String imagePath) {
     final bool isAsset = imagePath.startsWith('assets/');
 
@@ -64,11 +84,31 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: const [
-          Icon(Icons.bookmark_border_rounded),
-          SizedBox(width: 12),
-          Icon(Icons.download_sharp),
-          SizedBox(width: 20),
+        actions: [
+          BlocBuilder<AddPostCubit, AddPostState>(
+            builder: (context, state) {
+              final isSaved = (state.savedPosts ?? []).any(
+                (item) =>
+                    item.heading == post.heading &&
+                    item.description == post.description &&
+                    item.postCreated == post.postCreated,
+              );
+
+              return IconButton(
+                onPressed: () async {
+                  await context.read<AddPostCubit>().toggleSavedPost(post);
+                },
+                icon: Icon(
+                  isSaved
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 12),
+          const Icon(Icons.download_sharp),
+          const SizedBox(width: 20),
         ],
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
@@ -170,9 +210,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ),
                             ],
                           ),
-                          const Text(
-                            '1 hour ago',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          Text(
+                            formatPostTime(post.postCreated),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -194,12 +237,17 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               Text('34 likes'),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Icon(Icons.share, size: 20),
-                              SizedBox(width: Gaps.small),
-                              Text('Share'),
-                            ],
+                          InkWell(
+                            onTap: () {
+                              context.read<AddPostCubit>().sharePost(post);
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.share, size: 20),
+                                SizedBox(width: Gaps.small),
+                                const Text('Share'),
+                              ],
+                            ),
                           ),
                         ],
                       ),

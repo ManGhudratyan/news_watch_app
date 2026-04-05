@@ -14,6 +14,7 @@ import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/about/about_page.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/forgot_password_page.dart';
 import 'package:news_watch_app/presentation/pages/main/city_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/pages/saved_posts_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_widget.dart';
 import 'package:news_watch_app/presentation/widgets/slider_widget.dart';
 import 'package:tabbed_sliverlist/tabbed_sliverlist.dart';
@@ -116,7 +117,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 25),
                   Divider(color: Colors.grey.shade300),
-
                   SliderWidget(
                     icon: Icons.location_on_outlined,
                     title: 'Change city',
@@ -145,6 +145,18 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ForgotPasswordPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  SliderWidget(
+                    icon: Icons.bookmark_border_rounded,
+                    title: 'Saved posts',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SavedPostsPage(),
                         ),
                       );
                     },
@@ -266,63 +278,16 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           tabLists: tabs.map((tab) {
-                            if (tab == 'All') {
-                              if (posts.isEmpty) {
-                                return TabListBuilder(
-                                  uniquePageKey: tab,
-                                  length: 1,
-                                  builder: (context, index) => const Padding(
-                                    padding: EdgeInsets.all(20),
-                                    child: Center(child: Text("No posts yet")),
-                                  ),
-                                );
-                              }
+                            final filteredPosts = tab == 'All'
+                                ? posts
+                                : posts.where((post) {
+                                    return (post.category ?? '')
+                                            .trim()
+                                            .toLowerCase() ==
+                                        tab.toLowerCase();
+                                  }).toList();
 
-                              return TabListBuilder(
-                                uniquePageKey: tab,
-                                length: posts.length,
-                                builder: (context, index) {
-                                  final post = posts[index];
-                                  final hasLocalImage =
-                                      post.imagePath != null &&
-                                      post.imagePath!.isNotEmpty;
-
-                                  final imageToShow = hasLocalImage
-                                      ? post.imagePath!
-                                      : (getYoutubeLinkContains(
-                                              post.videoUrl,
-                                            ) ??
-                                            Assets.postImage);
-
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(
-                                        context,
-                                        rootNavigator: true,
-                                      ).pushNamed(
-                                        RouteConstants.postDetailsPage,
-                                        arguments: post,
-                                      );
-                                    },
-                                    child: PostWidget(
-                                      image: imageToShow,
-                                      postName: post.heading ?? 'heading',
-                                      username:
-                                          post.username ??
-                                          currentUsername ??
-                                          'username',
-                                      userImage: userImage,
-                                      description:
-                                          post.description ?? 'description',
-                                      isLocalImage: hasLocalImage,
-                                      isVideo:
-                                          post.videoUrl != null &&
-                                          post.videoUrl!.isNotEmpty,
-                                    ),
-                                  );
-                                },
-                              );
-                            } else {
+                            if (filteredPosts.isEmpty) {
                               return TabListBuilder(
                                 uniquePageKey: tab,
                                 length: 1,
@@ -334,6 +299,49 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             }
+
+                            return TabListBuilder(
+                              uniquePageKey: tab,
+                              length: filteredPosts.length,
+                              builder: (context, index) {
+                                final post = filteredPosts[index];
+                                final hasLocalImage =
+                                    post.imagePath != null &&
+                                    post.imagePath!.isNotEmpty;
+
+                                final imageToShow = hasLocalImage
+                                    ? post.imagePath!
+                                    : (getYoutubeLinkContains(post.videoUrl) ??
+                                          Assets.postImage);
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).pushNamed(
+                                      RouteConstants.postDetailsPage,
+                                      arguments: post,
+                                    );
+                                  },
+                                  child: PostWidget(
+                                    image: imageToShow,
+                                    postName: post.heading ?? 'heading',
+                                    username:
+                                        post.username ??
+                                        currentUsername ??
+                                        'username',
+                                    userImage: userImage,
+                                    description:
+                                        post.description ?? 'description',
+                                    isLocalImage: hasLocalImage,
+                                    isVideo:
+                                        post.videoUrl != null &&
+                                        post.videoUrl!.isNotEmpty,
+                                  ),
+                                );
+                              },
+                            );
                           }).toList(),
                         );
                       },

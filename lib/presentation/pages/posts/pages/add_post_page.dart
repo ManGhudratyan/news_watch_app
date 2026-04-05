@@ -1,5 +1,3 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,8 +25,9 @@ class _AddPostPageState extends State<AddPostPage> {
 
   final TextEditingController headingController = TextEditingController();
   final TextEditingController tagController = TextEditingController();
-  final TextEditingController categoryController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
+  String selectedCategory = 'popular';
 
   Future<void> pickImage() async {
     final XFile? image = await imagePicker.pickImage(
@@ -47,10 +46,11 @@ class _AddPostPageState extends State<AddPostPage> {
 
     final model = PostModel(
       heading: headingController.text,
-      category: categoryController.text,
+      category: selectedCategory,
       description: descriptionController.text,
       imagePath: selectedImage?.path,
       userId: userId,
+      postCreated: DateTime.now(),
     );
 
     final addPostCubit = context.read<AddPostCubit>();
@@ -137,9 +137,44 @@ class _AddPostPageState extends State<AddPostPage> {
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(title: 'Tag', controller: tagController),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(
-                      title: 'Category',
-                      controller: categoryController,
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedCategory,
+                      decoration: InputDecoration(
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 12,
+                        ),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'popular',
+                          child: Text('Popular'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'politics',
+                          child: Text('Politics'),
+                        ),
+                        DropdownMenuItem(value: 'tech', child: Text('Tech')),
+                        DropdownMenuItem(
+                          value: 'healthy',
+                          child: Text('Healthy'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'science',
+                          child: Text('Science'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedCategory = value;
+                          });
+                        }
+                      },
                     ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(

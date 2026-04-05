@@ -3,6 +3,7 @@ part 'post_model.g.dart';
 
 @JsonSerializable()
 class PostModel {
+  final String? id;
   final String? heading;
   final String? tag;
   final String? category;
@@ -13,6 +14,7 @@ class PostModel {
   final String? username;
   final String? videoUrl;
   final String? userLike;
+  final DateTime? postCreated;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
@@ -28,6 +30,8 @@ class PostModel {
     this.username,
     this.videoUrl,
     this.userLike,
+    this.postCreated,
+    this.id,
   });
 
   Map<String, dynamic> toJson() => _$PostModelToJson(this);
