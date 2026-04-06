@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,14 +11,14 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_elements_widget.dart';
 
-class AddVideoPage extends StatefulWidget {
-  const AddVideoPage({super.key});
+class VideoPage extends StatefulWidget {
+  const VideoPage({super.key});
 
   @override
-  State<AddVideoPage> createState() => _AddVideoPageState();
+  State<VideoPage> createState() => _VideoPageState();
 }
 
-class _AddVideoPageState extends State<AddVideoPage> {
+class _VideoPageState extends State<VideoPage> {
   final TextEditingController headingController = TextEditingController();
   final TextEditingController videoController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();

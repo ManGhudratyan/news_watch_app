@@ -1,1 +1,1 @@
-enum RadioType { mediaReporter, visitor }
+enum RadioType { reporter, visitor }

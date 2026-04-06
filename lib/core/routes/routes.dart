@@ -3,15 +3,15 @@ import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/data/models/post/post_model.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/forgot_password_page.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/sign_up_page.dart';
-import 'package:news_watch_app/presentation/pages/main/city_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/pages/add_post_page.dart';
-import 'package:news_watch_app/presentation/pages/main/home_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/pages/post_details_page.dart';
-import 'package:news_watch_app/presentation/pages/main_page.dart';
-import 'package:news_watch_app/presentation/pages/main/profile_page.dart';
-import 'package:news_watch_app/presentation/pages/main/settings_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/city_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/screens/add_post_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/home_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/screens/post_details_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/main_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/profile_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/settings_page.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/sign_in_page.dart';
-import 'package:news_watch_app/presentation/pages/splash_screen.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/splash_screen.dart';
 
 class Routes {
   static Route<dynamic>? generateRoute(RouteSettings settings) {

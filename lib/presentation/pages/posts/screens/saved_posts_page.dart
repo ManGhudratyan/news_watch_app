@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/utils/video_utils.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
@@ -28,15 +29,16 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final text = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Posts'),
+        title: Text(text.txtSavedPosts),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          final currentUsername = authState.user?.username ?? 'username';
+          final currentUsername = authState.user?.username ?? text.txtUsername;
           final userImage = authState.user?.imagePath?.isNotEmpty == true
               ? authState.user!.imagePath!
               : Assets.userImage;
@@ -46,7 +48,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
               final savedPosts = state.savedPosts ?? [];
 
               if (savedPosts.isEmpty) {
-                return const Center(child: Text('No saved posts yet'));
+                return Center(child: Text(text.txtNoSavedPosts));
               }
 
               return ListView.builder(
@@ -69,11 +71,12 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                       );
                     },
                     child: PostWidget(
+                      post: post,
                       image: imageToShow,
-                      postName: post.heading ?? 'heading',
+                      postName: post.heading ?? text.txtHeading,
                       username: post.username ?? currentUsername,
                       userImage: userImage,
-                      description: post.description ?? 'description',
+                      description: post.description ?? text.txtDescription,
                       isLocalImage: hasLocalImage,
                       isVideo:
                           post.videoUrl != null && post.videoUrl!.isNotEmpty,

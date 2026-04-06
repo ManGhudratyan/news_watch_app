@@ -208,4 +208,26 @@ class AddPostRepositoryImp implements AddPostRepository {
           item['postCreated'] == post.postCreated?.toIso8601String(),
     );
   }
+
+  @override
+  Future<void> deletePost(PostModel post) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final key = _postsKey(post.userId);
+    final String? savedPostsJson = sharedPrefs.getString(key);
+
+    if (savedPostsJson == null) return;
+
+    List<Map<String, dynamic>> allPosts = List<Map<String, dynamic>>.from(
+      json.decode(savedPostsJson),
+    );
+
+    allPosts.removeWhere(
+      (item) =>
+          item['heading'] == post.heading &&
+          item['description'] == post.description &&
+          item['postCreated'] == post.postCreated?.toIso8601String(),
+    );
+
+    await sharedPrefs.setString(key, json.encode(allPosts));
+  }
 }

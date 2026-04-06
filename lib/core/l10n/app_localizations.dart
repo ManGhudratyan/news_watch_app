@@ -142,11 +142,11 @@ abstract class AppLocalizations {
   /// **'Repeat password'**
   String get txtRepeatPassword;
 
-  /// No description provided for @txtMediaReporter.
+  /// No description provided for @txtReporter.
   ///
   /// In en, this message translates to:
-  /// **'Media Reporter'**
-  String get txtMediaReporter;
+  /// **'Reporter'**
+  String get txtReporter;
 
   /// No description provided for @txtVisitor.
   ///
@@ -441,6 +441,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create a video post'**
   String get txtCreateVideoPost;
+
+  /// No description provided for @txtManageYourInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your personal information'**
+  String get txtManageYourInformation;
+
+  /// No description provided for @txtLearnMoreAboutTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more about the app'**
+  String get txtLearnMoreAboutTheApp;
+
+  /// No description provided for @txtSignOutFromYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out from your account'**
+  String get txtSignOutFromYourAccount;
+
+  /// No description provided for @txtAddPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Post'**
+  String get txtAddPost;
+
+  /// No description provided for @txtAddPostImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Post Image'**
+  String get txtAddPostImage;
+
+  /// No description provided for @txtHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading'**
+  String get txtHeading;
+
+  /// No description provided for @txtTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag'**
+  String get txtTag;
+
+  /// No description provided for @txtSelectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get txtSelectCategory;
+
+  /// No description provided for @txtPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get txtPopular;
+
+  /// No description provided for @txtPolitics.
+  ///
+  /// In en, this message translates to:
+  /// **'Politics'**
+  String get txtPolitics;
+
+  /// No description provided for @txtTech.
+  ///
+  /// In en, this message translates to:
+  /// **'Tech'**
+  String get txtTech;
+
+  /// No description provided for @txtHealthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy'**
+  String get txtHealthy;
+
+  /// No description provided for @txtScience.
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get txtScience;
+
+  /// No description provided for @txtFillHeadingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill heading and description fields'**
+  String get txtFillHeadingDescription;
+
+  /// No description provided for @txtPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get txtPost;
+
+  /// No description provided for @txtSavedPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Posts'**
+  String get txtSavedPosts;
+
+  /// No description provided for @txtNoSavedPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved posts yet'**
+  String get txtNoSavedPosts;
+
+  /// No description provided for @txtShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get txtShare;
 }
 
 class _AppLocalizationsDelegate

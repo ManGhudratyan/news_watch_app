@@ -53,9 +53,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('en'), Locale('am')],
+      supportedLocales: const [Locale('en'), Locale('am'), Locale('ru')],
     );
   }
 }
-
-//forgot password, about page, saved posts, liked posts

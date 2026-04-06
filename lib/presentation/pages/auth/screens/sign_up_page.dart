@@ -24,7 +24,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  RadioType selectedValue = RadioType.mediaReporter;
+  RadioType selectedValue = RadioType.reporter;
   final FormGroup form = FormGroup({
     'username': FormControl<String>(validators: [Validators.required]),
     'email': FormControl<String>(
@@ -122,7 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       Row(
                         children: [
                           Radio<RadioType>(
-                            value: RadioType.mediaReporter,
+                            value: RadioType.reporter,
                             groupValue: selectedValue,
                             onChanged: (value) {
                               setState(() {
@@ -131,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             },
                             activeColor: Colors.blue,
                           ),
-                          Text(txt.txtMediaReporter),
+                          Text(txt.txtReporter),
                         ],
                       ),
                       SizedBox(width: Constants.sizedBoxWidth),

@@ -30,7 +30,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get txtRepeatPassword => 'Repeat password';
 
   @override
-  String get txtMediaReporter => 'Media Reporter';
+  String get txtReporter => 'Reporter';
 
   @override
   String get txtVisitor => 'Visitor';
@@ -178,4 +178,59 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get txtCreateVideoPost => 'Create a video post';
+
+  @override
+  String get txtManageYourInformation => 'Manage your personal information';
+
+  @override
+  String get txtLearnMoreAboutTheApp => 'Learn more about the app';
+
+  @override
+  String get txtSignOutFromYourAccount => 'Sign out from your account';
+
+  @override
+  String get txtAddPost => 'Add Post';
+
+  @override
+  String get txtAddPostImage => 'Add Post Image';
+
+  @override
+  String get txtHeading => 'Heading';
+
+  @override
+  String get txtTag => 'Tag';
+
+  @override
+  String get txtSelectCategory => 'Select category';
+
+  @override
+  String get txtPopular => 'Popular';
+
+  @override
+  String get txtPolitics => 'Politics';
+
+  @override
+  String get txtTech => 'Tech';
+
+  @override
+  String get txtHealthy => 'Healthy';
+
+  @override
+  String get txtScience => 'Science';
+
+  @override
+  String get txtFillHeadingDescription =>
+      'Please fill heading and description fields';
+
+  @override
+  String get txtPost => 'Post';
+
+  @override
+  String get txtSavedPosts => 'Saved Posts';
+
+  @override
+  String get txtNoSavedPosts => 'No saved posts yet';
+
+  @override
+  String get txtShare => 'Share';
 }

@@ -1,8 +1,11 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
+import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
@@ -26,7 +29,7 @@ class _AddPostPageState extends State<AddPostPage> {
   final TextEditingController tagController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  String selectedCategory = 'popular';
+  String? selectedCategory;
 
   Future<void> pickImage() async {
     final XFile? image = await imagePicker.pickImage(
@@ -39,9 +42,10 @@ class _AddPostPageState extends State<AddPostPage> {
 
   @override
   Widget build(BuildContext context) {
+    final text = AppLocalizations.of(context)!;
     return BlocListener<AddPostCubit, AddPostState>(
-      listener: (context, state) {
-        if (state.posts == true) {
+      listener: (context, addPostState) {
+        if (addPostState.posts == true) {
           Navigator.of(
             context,
             rootNavigator: true,
@@ -58,7 +62,7 @@ class _AddPostPageState extends State<AddPostPage> {
 
           final currentUserId = authState.user?.userId;
           return Scaffold(
-            appBar: AppBar(title: const Text("Add Post")),
+            appBar: AppBar(title: Text(text.txtAddPost)),
             body: Padding(
               padding: EdgeInsets.all(Gaps.large),
               child: SingleChildScrollView(
@@ -80,14 +84,14 @@ class _AddPostPageState extends State<AddPostPage> {
                         child: selectedImage == null
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.add_outlined,
                                     size: 40,
                                     color: Colors.grey,
                                   ),
                                   SizedBox(height: 8),
-                                  Text('Add Post Image'),
+                                  Text(text.txtAddPostImage),
                                 ],
                               )
                             : ClipRRect(
@@ -105,13 +109,17 @@ class _AddPostPageState extends State<AddPostPage> {
                     ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(
-                      title: 'Heading',
+                      title: text.txtHeading,
                       controller: headingController,
                     ),
                     SizedBox(height: Gaps.large),
-                    PostElementsWidget(title: 'Tag', controller: tagController),
+                    PostElementsWidget(
+                      title: text.txtTag,
+                      controller: tagController,
+                    ),
                     SizedBox(height: Gaps.large),
                     DropdownButtonFormField<String>(
+                      hint: Text(text.txtSelectCategory),
                       initialValue: selectedCategory,
                       decoration: InputDecoration(
                         filled: true,
@@ -123,23 +131,26 @@ class _AddPostPageState extends State<AddPostPage> {
                           horizontal: 12,
                         ),
                       ),
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: 'popular',
-                          child: Text('Popular'),
+                          child: Text(text.txtPopular),
                         ),
                         DropdownMenuItem(
                           value: 'politics',
-                          child: Text('Politics'),
+                          child: Text(text.txtPolitics),
                         ),
-                        DropdownMenuItem(value: 'tech', child: Text('Tech')),
+                        DropdownMenuItem(
+                          value: 'tech',
+                          child: Text(text.txtTech),
+                        ),
                         DropdownMenuItem(
                           value: 'healthy',
-                          child: Text('Healthy'),
+                          child: Text(text.txtHealthy),
                         ),
                         DropdownMenuItem(
                           value: 'science',
-                          child: Text('Science'),
+                          child: Text(text.txtScience),
                         ),
                       ],
                       onChanged: (value) {
@@ -152,7 +163,7 @@ class _AddPostPageState extends State<AddPostPage> {
                     ),
                     SizedBox(height: Gaps.large),
                     PostElementsWidget(
-                      title: 'Description',
+                      title: text.txtDescription,
                       controller: descriptionController,
                     ),
                     SizedBox(height: Gaps.larger),
@@ -170,7 +181,9 @@ class _AddPostPageState extends State<AddPostPage> {
                                           heading: headingController.text,
                                           description:
                                               descriptionController.text,
-                                          category: selectedCategory,
+                                          category:
+                                              selectedCategory ??
+                                              text.txtCategory,
                                           userId: currentUserId!,
                                           imagePath: selectedImage?.path,
                                           tag: tagController.text,
@@ -186,7 +199,7 @@ class _AddPostPageState extends State<AddPostPage> {
                                       ).pushNamed(RouteConstants.mainPage);
                                     } else {
                                       context.showSnackBarMessage(
-                                        "Please fill heading and description fields",
+                                        text.txtFillHeadingDescription,
                                       );
                                     }
                                   },
@@ -202,8 +215,8 @@ class _AddPostPageState extends State<AddPostPage> {
                                       strokeWidth: 2,
                                     ),
                                   )
-                                : const Text(
-                                    'Post',
+                                : Text(
+                                    text.txtPost,
                                     style: TextStyle(color: Colors.white),
                                   ),
                           ),

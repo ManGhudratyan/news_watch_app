@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/utils/video_utils.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
@@ -12,10 +13,10 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/about/about_page.dart';
+import 'package:news_watch_app/presentation/pages/about/screens/about_page.dart';
 import 'package:news_watch_app/presentation/pages/auth/screens/forgot_password_page.dart';
-import 'package:news_watch_app/presentation/pages/main/city_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/pages/saved_posts_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/city_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/screens/saved_posts_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_widget.dart';
 import 'package:news_watch_app/presentation/widgets/slider_widget.dart';
 import 'package:tabbed_sliverlist/tabbed_sliverlist.dart';
@@ -34,22 +35,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = context.read<AuthCubit>().state.user?.userId;
 
       if (userId != null && userId.isNotEmpty) {
-        final cubit = context.read<AddPostCubit>();
-
-        cubit.getPosts(userId);
-        cubit.getSavedPosts(userId);
-        cubit.getLikedPosts(userId);
+        final addPostCubit = context.read<AddPostCubit>();
+        addPostCubit.getPosts(userId);
+        addPostCubit.getSavedPosts(userId);
+        addPostCubit.getLikedPosts(userId);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final text = AppLocalizations.of(context)!;
     final List<String> tabs = [
       'All',
       'Popular',
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                             ? FileImage(File(authState.user!.imagePath!))
                             : AssetImage(Assets.userImage) as ImageProvider,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: Gaps.large),
                       Text(
                         authState.user!.username,
                         style: const TextStyle(
@@ -104,9 +104,9 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: Gaps.medium),
                       Text(
-                        authState.user?.userCity ?? 'user city',
+                        authState.user?.userCity ?? 'User city',
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey.shade600,
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 25),
+                  SizedBox(height: Gaps.larger),
                   Divider(color: Colors.grey.shade300),
                   SliderWidget(
                     icon: Icons.location_on_outlined,
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SliderWidget(
                     icon: Icons.password_sharp,
-                    title: 'Forgot password',
+                    title: text.txtForgotPassword,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SliderWidget(
                     icon: Icons.bookmark_border_rounded,
-                    title: 'Saved posts',
+                    title: text.txtSavedPosts,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -161,10 +161,10 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   Divider(color: Colors.grey.shade300),
-                  const SizedBox(height: 10),
+                  SizedBox(height: Gaps.medium),
                   SliderWidget(
                     icon: Icons.logout,
-                    title: 'Logout',
+                    title: text.txtLogOut,
                     isLogout: true,
                     onTap: () {
                       context.read<AuthCubit>().userlogOut();
@@ -254,14 +254,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Expanded(
                     child: BlocBuilder<AddPostCubit, AddPostState>(
-                      builder: (context, state) {
-                        if (state.loading) {
+                      builder: (context, addPostState) {
+                        if (addPostState.loading) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
 
-                        final posts = state.posts ?? [];
+                        final posts = addPostState.posts ?? [];
 
                         return TabbedList(
                           tabLength: tabs.length,
@@ -326,15 +326,16 @@ class _HomePageState extends State<HomePage> {
                                     );
                                   },
                                   child: PostWidget(
+                                    post: post,
                                     image: imageToShow,
-                                    postName: post.heading ?? 'heading',
+                                    postName: post.heading ?? text.txtHeading,
                                     username:
                                         post.username ??
                                         currentUsername ??
-                                        'username',
+                                        text.txtUsername,
                                     userImage: userImage,
                                     description:
-                                        post.description ?? 'description',
+                                        post.description ?? text.txtDescription,
                                     isLocalImage: hasLocalImage,
                                     isVideo:
                                         post.videoUrl != null &&

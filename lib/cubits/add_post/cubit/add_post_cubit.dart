@@ -38,7 +38,6 @@ class AddPostCubit extends Cubit<AddPostState> {
     emit(state.copyWith(loading: true));
     try {
       final updatedPosts = await addPostRepository.getPosts(userId: userId);
-
       emit(state.copyWith(posts: updatedPosts, loading: false));
     } catch (e) {
       emit(state.copyWith(loading: false));
@@ -49,7 +48,6 @@ class AddPostCubit extends Cubit<AddPostState> {
     try {
       final String shareText =
           '${post.heading ?? 'News Post'}\n\n${post.description ?? ''}';
-
       if (post.imagePath != null && post.imagePath!.isNotEmpty) {
         await SharePlus.instance.share(
           ShareParams(
@@ -63,8 +61,8 @@ class AddPostCubit extends Cubit<AddPostState> {
           ShareParams(title: post.heading ?? 'Share Post', text: shareText),
         );
       }
-    } catch (e) {
-      debugPrint('Share failed: $e');
+    } catch (error) {
+      debugPrint('Share failed: $error');
     }
   }
 
@@ -190,5 +188,33 @@ class AddPostCubit extends Cubit<AddPostState> {
       userId: post.userId,
     );
     emit(state.copyWith(likedPosts: likedPosts));
+  }
+
+  Future<void> deletePost(PostModel post) async {
+    emit(state.copyWith(loading: true));
+
+    try {
+      await addPostRepository.deletePost(post);
+      final updatedPosts = await addPostRepository.getPosts(
+        userId: post.userId,
+      );
+      final updatedSavedPosts = await addPostRepository.getSavedPosts(
+        userId: post.userId,
+      );
+      final updatedLikedPosts = await addPostRepository.getLikedPosts(
+        userId: post.userId,
+      );
+
+      emit(
+        state.copyWith(
+          posts: updatedPosts,
+          savedPosts: updatedSavedPosts,
+          likedPosts: updatedLikedPosts,
+          loading: false,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(loading: false));
+    }
   }
 }

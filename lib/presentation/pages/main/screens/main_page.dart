@@ -8,11 +8,11 @@ import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
-import 'package:news_watch_app/presentation/pages/main/home_page.dart';
-import 'package:news_watch_app/presentation/pages/main/profile_page.dart';
-import 'package:news_watch_app/presentation/pages/main/settings_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/pages/add_post_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/pages/add_video_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/home_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/profile_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/settings_page.dart';
+import 'package:news_watch_app/presentation/pages/posts/screens/add_post_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/video_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MainPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> _buildScreens() {
     return const [
       HomePage(),
-      AddVideoPage(),
+      VideoPage(),
       AddPostPage(),
       SettingsPage(),
       ProfilePage(),

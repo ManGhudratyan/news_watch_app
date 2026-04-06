@@ -11,4 +11,5 @@ abstract class AddPostRepository {
   Future<void> removeLikedPost(PostModel post);
   Future<List<PostModel>> getLikedPosts({required String userId});
   Future<bool> isPostLiked(PostModel post);
+  Future<void> deletePost(PostModel post);
 }

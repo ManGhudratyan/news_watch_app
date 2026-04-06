@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_watch_app/presentation/constants/gaps.dart';
 
 class PostElementsWidget extends StatelessWidget {
   const PostElementsWidget({
@@ -17,9 +18,9 @@ class PostElementsWidget extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 12,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: Gaps.large,
+          horizontal: Gaps.medium,
         ),
         hintText: title,
       ),

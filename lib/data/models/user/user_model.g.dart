@@ -35,6 +35,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
 };
 
 const _$RadioTypeEnumMap = {
-  RadioType.mediaReporter: 'mediaReporter',
+  RadioType.reporter: 'reporter',
   RadioType.visitor: 'visitor',
 };

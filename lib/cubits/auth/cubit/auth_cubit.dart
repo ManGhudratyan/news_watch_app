@@ -52,9 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
           ),
         );
       } else {
-        emit(
-          state.copyWith(loading: false, error: "Email or password incorrect"),
-        );
+        emit(state.copyWith(loading: false));
       }
     } catch (error) {
       emit(state.copyWith(loading: false, error: error.toString()));

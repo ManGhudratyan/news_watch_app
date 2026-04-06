@@ -45,9 +45,7 @@ class _SignInPageState extends State<SignInPage> {
           if (savedUser?.email == enteredEmail &&
               savedUser?.password == enteredPassword) {
             Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
-          } else {
-            context.showSnackBarMessage(" ");
-          }
+          } 
         }
       },
       builder: (context, authState) {

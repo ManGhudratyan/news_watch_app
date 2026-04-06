@@ -7,7 +7,7 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/button_widget.dart';
-import 'package:news_watch_app/presentation/pages/main/home_page.dart';
+import 'package:news_watch_app/presentation/pages/main/screens/home_page.dart';
 
 class CityPage extends StatefulWidget {
   const CityPage({super.key});
