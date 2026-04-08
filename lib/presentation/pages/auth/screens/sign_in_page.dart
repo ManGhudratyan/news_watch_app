@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
@@ -44,8 +45,8 @@ class _SignInPageState extends State<SignInPage> {
 
           if (savedUser?.email == enteredEmail &&
               savedUser?.password == enteredPassword) {
-            Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
-          } 
+            context.push(RouteConstants.mainPage);
+          }
         }
       },
       builder: (context, authState) {
@@ -81,10 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                     SizedBox(height: screenHeight * 0.01),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          RouteConstants.forgotPasswordPage,
-                        );
+                        context.push(RouteConstants.forgotPasswordPage);
                       },
                       child: Align(
                         alignment: Alignment.bottomRight,
@@ -100,7 +98,7 @@ class _SignInPageState extends State<SignInPage> {
                   Text(txt.txtDontHaveAnAccount),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteConstants.signUpPage);
+                      context.push(RouteConstants.signUpPage);
                     },
                     child: Text(
                       txt.txtRegister,

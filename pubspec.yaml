@@ -31,6 +31,8 @@ dependencies:
   youtube_player_flutter: ^9.1.3
   flutter_slider_drawer: ^3.0.2
   share_plus: ^12.0.2
+  go_router: ^17.2.0
+  connectivity_plus: ^7.1.0
 
 dev_dependencies:
   flutter_test:

@@ -12,4 +12,6 @@ class RouteConstants {
   static const String pollPage = '/poll_page';
   static const String postDetailsPage = '/post_details_page';
   static const String cityPage = '/city_page';
+  static const String aboutPage = '/about_page';
+  static const String savedPostsPage = '/saved_posts_page';
 }

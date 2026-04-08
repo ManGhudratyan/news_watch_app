@@ -3,25 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
-import 'package:news_watch_app/core/routes/route_constants.dart';
-import 'package:news_watch_app/core/routes/routes.dart';
+import 'package:news_watch_app/core/routes/app_router.dart';
 import 'package:news_watch_app/cubits/add_post/cubit/add_post_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
+import 'package:news_watch_app/cubits/connectivity/connectivity_cubit.dart';
+// import 'package:news_watch_app/cubits/connectivity/connectivity_cubit.dart';
 import 'package:news_watch_app/data/repositories/add_post_repository_imp.dart';
 import 'package:news_watch_app/data/repositories/user_repository_imp.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(
-    widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
-  );
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   final userRepository = UserRepositoryImp();
   final addPostRepository = AddPostRepositoryImp();
-  final isLoggedIn = await userRepository.isLoggedIn();
+
+  await userRepository.isLoggedIn();
 
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider<ConnectivityCubit>(create: (_) => ConnectivityCubit()),
         BlocProvider<AuthCubit>(
           create: (_) => AuthCubit(userRepository)..getLoggedInUser(),
         ),
@@ -29,24 +32,21 @@ void main() async {
           create: (_) => AddPostCubit(addPostRepository),
         ),
       ],
-      child: MyApp(isLoggedIn: isLoggedIn),
+      child: const MyApp(),
     ),
   );
+
   FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLoggedIn;
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      initialRoute: isLoggedIn
-          ? RouteConstants.mainPage
-          : RouteConstants.initialRoute,
-      onGenerateRoute: Routes.generateRoute,
+      routerConfig: AppRouter.router,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

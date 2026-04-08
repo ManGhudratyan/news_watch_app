@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
@@ -46,10 +47,11 @@ class _AddPostPageState extends State<AddPostPage> {
     return BlocListener<AddPostCubit, AddPostState>(
       listener: (context, addPostState) {
         if (addPostState.posts == true) {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).pushNamed(RouteConstants.mainPage);
+          // Navigator.of(
+          //   context,
+          //   rootNavigator: true,
+          // ).pushNamed(RouteConstants.mainPage);
+          context.push(RouteConstants.mainPage);
         }
       },
       child: BlocBuilder<AuthCubit, AuthState>(
@@ -193,10 +195,11 @@ class _AddPostPageState extends State<AddPostPage> {
                                     if (!context.mounted) return;
 
                                     if (success) {
-                                      Navigator.of(
-                                        context,
-                                        rootNavigator: true,
-                                      ).pushNamed(RouteConstants.mainPage);
+                                      // Navigator.of(
+                                      //   context,
+                                      //   rootNavigator: true,
+                                      // ).pushNamed(RouteConstants.mainPage);
+                                      context.push(RouteConstants.mainPage);
                                     } else {
                                       context.showSnackBarMessage(
                                         text.txtFillHeadingDescription,

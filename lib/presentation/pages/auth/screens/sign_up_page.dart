@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
@@ -48,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
           context.showSnackBarMessage(authState.error ?? '');
         }
         if (authState.user != null) {
-          Navigator.pushReplacementNamed(context, RouteConstants.mainPage);
+          context.push(RouteConstants.mainPage);
         }
       },
       builder: (context, authState) {
@@ -160,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Text(txt.txtHaveAnAccount),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteConstants.signInPage);
+                      context.push(RouteConstants.signInPage);
                     },
                     child: Text(
                       txt.btnSignIn,

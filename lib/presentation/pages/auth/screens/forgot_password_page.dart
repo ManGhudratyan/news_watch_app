@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
@@ -41,7 +42,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           if (state.error?.isNotEmpty ?? false) {
             context.showSnackBarMessage(state.error ?? 'error');
           } else if (state.user != null) {
-            Navigator.pushNamed(context, RouteConstants.mainPage);
+            context.push(RouteConstants.mainPage);
           }
         },
         child: Padding(

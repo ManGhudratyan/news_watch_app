@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/extensions/scaffold_extension.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
@@ -37,10 +38,11 @@ class _VideoPageState extends State<VideoPage> {
     return BlocListener<AddPostCubit, AddPostState>(
       listener: (context, state) {
         if (state.posts == true) {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).pushNamed(RouteConstants.mainPage);
+          // Navigator.of(
+          //   context,
+          //   rootNavigator: true,
+          // ).pushNamed(RouteConstants.mainPage);
+          context.push(RouteConstants.mainPage);
         }
       },
       child: BlocBuilder<AuthCubit, AuthState>(
@@ -200,10 +202,11 @@ class _VideoPageState extends State<VideoPage> {
                                             return;
                                           }
 
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).pushNamed(RouteConstants.mainPage);
+                                          // Navigator.of(
+                                          //   context,
+                                          //   rootNavigator: true,
+                                          // ).pushNamed(RouteConstants.mainPage);
+                                          context.push(RouteConstants.mainPage);
                                         },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,

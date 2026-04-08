@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
+import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/about/screens/about_page.dart';
-import 'package:news_watch_app/presentation/pages/main/screens/profile_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/settings_item_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -57,12 +57,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: txt.txtProfile,
                     subtitle: txt.txtManageYourInformation,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProfilePage(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const ProfilePage(),
+                      //   ),
+                      // );
+                      context.push(RouteConstants.profilePage);
                     },
                   ),
                   Padding(
@@ -78,12 +79,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: txt.txtAbout,
                     subtitle: txt.txtLearnMoreAboutTheApp,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutPage(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const AboutPage(),
+                      //   ),
+                      // );
+                      context.push(RouteConstants.aboutPage);
                     },
                   ),
                 ],

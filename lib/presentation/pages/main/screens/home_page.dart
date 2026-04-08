@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/utils/video_utils.dart';
@@ -13,10 +14,6 @@ import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_state.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
-import 'package:news_watch_app/presentation/pages/about/screens/about_page.dart';
-import 'package:news_watch_app/presentation/pages/auth/screens/forgot_password_page.dart';
-import 'package:news_watch_app/presentation/pages/main/screens/city_page.dart';
-import 'package:news_watch_app/presentation/pages/posts/screens/saved_posts_page.dart';
 import 'package:news_watch_app/presentation/pages/posts/widgets/post_widget.dart';
 import 'package:news_watch_app/presentation/widgets/slider_widget.dart';
 import 'package:tabbed_sliverlist/tabbed_sliverlist.dart';
@@ -120,44 +117,28 @@ class _HomePageState extends State<HomePage> {
                     icon: Icons.location_on_outlined,
                     title: 'Change city',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CityPage()),
-                      );
+                      context.push(RouteConstants.cityPage);
                     },
                   ),
                   SliderWidget(
                     icon: Icons.verified_user_outlined,
                     title: 'About page',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AboutPage()),
-                      );
+                      context.push(RouteConstants.aboutPage);
                     },
                   ),
                   SliderWidget(
                     icon: Icons.password_sharp,
                     title: text.txtForgotPassword,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ForgotPasswordPage(),
-                        ),
-                      );
+                      context.push(RouteConstants.forgotPasswordPage);
                     },
                   ),
                   SliderWidget(
                     icon: Icons.bookmark_border_rounded,
                     title: text.txtSavedPosts,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SavedPostsPage(),
-                        ),
-                      );
+                      context.push(RouteConstants.savedPostsPage);
                     },
                   ),
                   Divider(color: Colors.grey.shade300),
@@ -194,12 +175,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CityPage(),
-                                ),
-                              );
+                              context.push(RouteConstants.cityPage);
                             },
                             child: Row(
                               children: [
@@ -317,12 +293,9 @@ class _HomePageState extends State<HomePage> {
 
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigator.of(
-                                      context,
-                                      rootNavigator: true,
-                                    ).pushNamed(
+                                    context.push(
                                       RouteConstants.postDetailsPage,
-                                      arguments: post,
+                                      extra: post,
                                     );
                                   },
                                   child: PostWidget(

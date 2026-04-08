@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/core/utils/video_utils.dart';
@@ -65,10 +66,11 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed(
-                        RouteConstants.postDetailsPage,
-                        arguments: post,
-                      );
+                      // Navigator.of(context).pushNamed(
+                      //   RouteConstants.postDetailsPage,
+                      //   arguments: post,
+                      // );
+                      context.push(RouteConstants.postDetailsPage, extra: post);
                     },
                     child: PostWidget(
                       post: post,

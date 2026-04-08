@@ -2,12 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/l10n/app_localizations.dart';
+import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/cubits/auth/cubit/auth_cubit.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
 import 'package:news_watch_app/presentation/constants/gaps.dart';
 import 'package:news_watch_app/presentation/pages/auth/widgets/button_widget.dart';
-import 'package:news_watch_app/presentation/pages/main/screens/home_page.dart';
 
 class CityPage extends StatefulWidget {
   const CityPage({super.key});
@@ -227,10 +228,11 @@ class _CityPageState extends State<CityPage> {
                   context.read<AuthCubit>().updateUser(updatedUser!);
                 }
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const HomePage()),
+                // );
+                context.push(RouteConstants.homePage);
               }
             },
           ),

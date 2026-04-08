@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:news_watch_app/core/routes/route_constants.dart';
 import 'package:news_watch_app/presentation/constants/assets.dart';
 import 'package:news_watch_app/presentation/constants/constants.dart';
@@ -16,7 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () {
-      Navigator.pushNamed(context, RouteConstants.signUpPage);
+      // Navigator.pushNamed(context, RouteConstants.signUpPage);
+      context.push(RouteConstants.signUpPage);
     });
   }
 
